@@ -1,3 +1,4 @@
+# (PART) Chapters 8-10 {-}
 # Chapter 8: Principle Component Analysis
 
 

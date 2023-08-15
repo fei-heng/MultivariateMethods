@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 1 Chapter 8: Principle Component Analysis | Lecture notes for STA 6707 Multivariate Methods</title>
+<meta name="author" content="Fei Heng">
+<meta name="description" content="1.1 Example 8.3, Exercise 8.11 A census provided information, by tract, on five socioeconomic variables for the Madison, Wisconsin, area. total population (thousands) professional degree (percent)...">
+<meta name="generator" content="bookdown 0.35 with bs4_book()">
+<meta property="og:title" content="Chapter 1 Chapter 8: Principle Component Analysis | Lecture notes for STA 6707 Multivariate Methods">
+<meta property="og:type" content="book">
+<meta property="og:description" content="1.1 Example 8.3, Exercise 8.11 A census provided information, by tract, on five socioeconomic variables for the Madison, Wisconsin, area. total population (thousands) professional degree (percent)...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 1 Chapter 8: Principle Component Analysis | Lecture notes for STA 6707 Multivariate Methods">
+<meta name="twitter:description" content="1.1 Example 8.3, Exercise 8.11 A census provided information, by tract, on five socioeconomic variables for the Madison, Wisconsin, area. total population (thousands) professional degree (percent)...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Lecture notes for STA 6707 Multivariate Methods</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About</a></li>
+<li><a class="active" href="chapter-8-principle-component-analysis.html"><span class="header-section-number">1</span> Chapter 8: Principle Component Analysis</a></li>
+<li><a class="" href="chapter-9-factor-analysis.html"><span class="header-section-number">2</span> Chapter 9: Factor Analysis</a></li>
+<li><a class="" href="chapter-10-discrimination-and-classification.html"><span class="header-section-number">3</span> Chapter 10: Discrimination and Classification</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/rstudio/bookdown-demo">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="chapter-8-principle-component-analysis" class="section level1" number="1">
+<h1>
+<span class="header-section-number">1</span> Chapter 8: Principle Component Analysis<a class="anchor" aria-label="anchor" href="#chapter-8-principle-component-analysis"><i class="fas fa-link"></i></a>
+</h1>
+<hr>
+<div id="example-8.3-exercise-8.11" class="section level2" number="1.1">
+<h2>
+<span class="header-section-number">1.1</span> Example 8.3, Exercise 8.11<a class="anchor" aria-label="anchor" href="#example-8.3-exercise-8.11"><i class="fas fa-link"></i></a>
+</h2>
+<p>A census provided information, by tract, on five socioeconomic variables for the
+Madison, Wisconsin, area.</p>
+<ul>
+<li>total population (thousands)</li>
+<li>professional degree (percent)</li>
+<li>employed age over 16 (percent)</li>
+<li>government employment (percent)</li>
+<li>median home value</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-5.dat"</span>,header<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">X</span></span>
+<span><span class="co">#&gt;      V1    V2    V3   V4   V5</span></span>
+<span><span class="co">#&gt; 1  2.67  5.71 69.02 30.3 1.48</span></span>
+<span><span class="co">#&gt; 2  2.25  4.37 72.98 43.3 1.44</span></span>
+<span><span class="co">#&gt; 3  3.12 10.27 64.94 32.0 2.11</span></span>
+<span><span class="co">#&gt; 4  5.14  7.44 71.29 24.5 1.85</span></span>
+<span><span class="co">#&gt; 5  5.54  9.25 74.94 31.0 2.23</span></span>
+<span><span class="co">#&gt; 6  5.04  4.84 53.61 48.2 1.60</span></span>
+<span><span class="co">#&gt; 7  3.14  4.82 67.00 37.6 1.52</span></span>
+<span><span class="co">#&gt; 8  2.43  2.40 67.20 36.8 1.40</span></span>
+<span><span class="co">#&gt; 9  5.38  4.30 83.03 19.7 2.07</span></span>
+<span><span class="co">#&gt; 10 7.34  2.73 72.60 24.5 1.42</span></span>
+<span><span class="co">#&gt; 11 4.94  4.66 64.32 27.7 1.42</span></span>
+<span><span class="co">#&gt; 12 4.82  4.26 82.64 20.3 1.46</span></span>
+<span><span class="co">#&gt; 13 5.02  4.17 84.25 20.6 1.42</span></span>
+<span><span class="co">#&gt; 14 3.37  1.00 69.93 16.4 1.17</span></span>
+<span><span class="co">#&gt; 15 3.63  6.40 70.31 29.0 2.00</span></span>
+<span><span class="co">#&gt; 16 7.43  6.00 70.53 37.7 1.44</span></span>
+<span><span class="co">#&gt; 17 2.20 10.59 69.85 41.7 2.01</span></span>
+<span><span class="co">#&gt; 18 7.16  4.71 79.44 33.0 1.55</span></span>
+<span><span class="co">#&gt; 19 6.33  2.88 66.24 38.1 1.73</span></span>
+<span><span class="co">#&gt; 20 2.57  1.85 67.25 33.4 1.18</span></span>
+<span><span class="co">#&gt; 21 6.38  1.56 63.00 18.2 0.93</span></span>
+<span><span class="co">#&gt; 22 5.34  3.41 72.57 20.1 1.66</span></span>
+<span><span class="co">#&gt; 23 4.87  5.20 75.13 16.5 3.64</span></span>
+<span><span class="co">#&gt; 24 2.04  4.83 67.78 17.4 1.49</span></span>
+<span><span class="co">#&gt; 25 5.48  1.34 77.43 21.6 1.32</span></span>
+<span><span class="co">#&gt; 26 7.77  5.32 58.57 31.2 3.21</span></span>
+<span><span class="co">#&gt; 27 6.29  2.60 64.32 27.4 1.78</span></span>
+<span><span class="co">#&gt; 28 6.38  3.71 78.61 34.1 1.30</span></span>
+<span><span class="co">#&gt; 29 5.76  4.06 83.77 31.4 1.52</span></span>
+<span><span class="co">#&gt; 30 6.03  3.10 76.04 25.0 1.08</span></span>
+<span><span class="co">#&gt; 31 5.09  1.85 74.65 24.1 0.97</span></span>
+<span><span class="co">#&gt; 32 4.36  1.67 65.43 23.7 1.07</span></span>
+<span><span class="co">#&gt; 33 3.07  2.00 68.03 26.2 1.19</span></span>
+<span><span class="co">#&gt; 34 1.82  1.13 49.50 21.9 1.62</span></span>
+<span><span class="co">#&gt; 35 3.31  0.94 74.75 26.5 1.12</span></span>
+<span><span class="co">#&gt; 36 3.45  0.72 65.99 22.0 1.20</span></span>
+<span><span class="co">#&gt; 37 1.74  0.97 60.24 22.0 1.17</span></span>
+<span><span class="co">#&gt; 38 1.81  1.54 70.05 24.4 1.00</span></span>
+<span><span class="co">#&gt; 39 5.59  1.66 77.96 17.1 1.30</span></span>
+<span><span class="co">#&gt; 40 3.72  1.69 82.40 16.3 1.52</span></span>
+<span><span class="co">#&gt; 41 3.39  1.24 67.17 27.7 1.03</span></span>
+<span><span class="co">#&gt; 42 2.25  2.80 70.81 23.4 1.14</span></span>
+<span><span class="co">#&gt; 43 3.31  1.30 71.30 19.2 1.21</span></span>
+<span><span class="co">#&gt; 44 5.27  1.20 73.08 30.3 1.35</span></span>
+<span><span class="co">#&gt; 45 3.26  1.02 74.36 16.5 1.23</span></span>
+<span><span class="co">#&gt; 46 6.76  1.53 78.37 22.6 1.33</span></span>
+<span><span class="co">#&gt; 47 2.92  4.42 58.50 68.5 2.25</span></span>
+<span><span class="co">#&gt; 48 1.64 16.70 64.61 49.4 3.13</span></span>
+<span><span class="co">#&gt; 49 1.36 14.26 66.42 22.5 2.80</span></span>
+<span><span class="co">#&gt; 50 3.58  3.38 65.57 26.1 1.31</span></span>
+<span><span class="co">#&gt; 51 3.38  2.17 66.10 22.6 1.44</span></span>
+<span><span class="co">#&gt; 52 7.25  1.16 78.52 23.6 1.50</span></span>
+<span><span class="co">#&gt; 53 5.44  2.93 73.59 22.3 1.65</span></span>
+<span><span class="co">#&gt; 54 5.83  4.47 77.33 26.2 2.16</span></span>
+<span><span class="co">#&gt; 55 3.74  2.26 79.70 20.2 1.58</span></span>
+<span><span class="co">#&gt; 56 9.21  2.36 74.58 21.8 1.72</span></span>
+<span><span class="co">#&gt; 57 2.14  6.30 86.54 17.4 2.80</span></span>
+<span><span class="co">#&gt; 58 6.62  4.79 78.84 20.0 2.33</span></span>
+<span><span class="co">#&gt; 59 4.24  5.82 71.39 27.1 1.69</span></span>
+<span><span class="co">#&gt; 60 4.72  4.71 78.01 20.6 1.55</span></span>
+<span><span class="co">#&gt; 61 6.48  4.93 74.23 20.9 1.98</span></span>
+<span></span>
+<span><span class="co"># The function princomp() uses the spectral decomposition approach. </span></span>
+<span><span class="co"># The functions prcomp() use the singular value decomposition (SVD).</span></span>
+<span></span>
+<span><span class="va">X.pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importance of components:</span></span>
+<span><span class="co">#&gt;                           PC1    PC2     PC3     PC4</span></span>
+<span><span class="co">#&gt; Standard deviation     10.345 6.2986 2.89324 1.69348</span></span>
+<span><span class="co">#&gt; Proportion of Variance  0.677 0.2510 0.05295 0.01814</span></span>
+<span><span class="co">#&gt; Cumulative Proportion   0.677 0.9279 0.98088 0.99902</span></span>
+<span><span class="co">#&gt;                            PC5</span></span>
+<span><span class="co">#&gt; Standard deviation     0.39331</span></span>
+<span><span class="co">#&gt; Proportion of Variance 0.00098</span></span>
+<span><span class="co">#&gt; Cumulative Proportion  1.00000</span></span>
+<span></span>
+<span><span class="co"># The rotation shows the estimated eigenvector loadings</span></span>
+<span><span class="va">X.pc</span><span class="op">$</span><span class="va">rotation</span></span>
+<span><span class="co">#&gt;             PC1         PC2         PC3         PC4</span></span>
+<span><span class="co">#&gt; V1  0.038887287 -0.07114494  0.18789258  0.97713524</span></span>
+<span><span class="co">#&gt; V2 -0.105321969 -0.12975236 -0.96099580  0.17135181</span></span>
+<span><span class="co">#&gt; V3  0.492363944 -0.86438807  0.04579737 -0.09104368</span></span>
+<span><span class="co">#&gt; V4 -0.863069865 -0.48033178  0.15318538 -0.02968577</span></span>
+<span><span class="co">#&gt; V5 -0.009122262 -0.01474342 -0.12498114  0.08170118</span></span>
+<span><span class="co">#&gt;             PC5</span></span>
+<span><span class="co">#&gt; V1 -0.057699864</span></span>
+<span><span class="co">#&gt; V2 -0.138554092</span></span>
+<span><span class="co">#&gt; V3  0.004966048</span></span>
+<span><span class="co">#&gt; V4  0.006691800</span></span>
+<span><span class="co">#&gt; V5  0.988637470</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/screeplot.html">screeplot</a></span><span class="op">(</span><span class="va">X.pc</span>, col <span class="op">=</span> <span class="st">"red"</span>, pch <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>          type <span class="op">=</span> <span class="st">"lines"</span>, cex <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span>, main <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-1.png" width="672"></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Another useful graphical method to help interpret the first two principal components is called the biplot.</span></span>
+<span><span class="co"># Biplots are a graphical method for simultaneously displaying the variables and sample units described by a multivariate data matrix.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/biplot.html">biplot</a></span><span class="op">(</span><span class="va">X.pc</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.75</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>       xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="op">-</span><span class="fl">.45</span>, <span class="fl">.45</span><span class="op">)</span>,</span>
+<span>       xlab <span class="op">=</span> <span class="st">"First principal component"</span>,</span>
+<span>       ylab <span class="op">=</span> <span class="st">"Second principal component"</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"Biplot"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-2.png" width="672"></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># use the factoextra package to create a ggplot2-based elegant visualization.</span></span>
+<span></span>
+<span><span class="co"># (1) Visualize eigenvalues (scree plot). Show the percentage of variances explained by each principal component.</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: ggplot2</span></span>
+<span><span class="co">#&gt; Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_eig</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-3.png" width="672"></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span></span>
+<span><span class="co"># (2) Graph of individuals. Individuals with a similar profile are grouped together.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html">fviz_pca_ind</a></span><span class="op">(</span><span class="va">X.pc</span>,</span>
+<span>             col.ind <span class="op">=</span> <span class="st">"cos2"</span>, <span class="co"># Color by the quality of representation</span></span>
+<span>             gradient.cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span><span class="op">)</span>,</span>
+<span>             repel <span class="op">=</span> <span class="cn">TRUE</span>     <span class="co"># Avoid text overlapping</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-4.png" width="672"></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co">## The quality of representation shows the importance of a principal component for a given observation</span></span>
+<span><span class="co">## Some details about computing cos2: the quality of representation</span></span>
+<span><span class="co"># a. Coordinates of individuals on the principal components</span></span>
+<span><span class="va">ind.coord</span> <span class="op">&lt;-</span> <span class="va">X.pc</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">ind.coord</span></span>
+<span><span class="co">#&gt;                PC1          PC2          PC3         PC4</span></span>
+<span><span class="co">#&gt;  [1,]  -4.35590788   0.35186425  -1.58945113 -1.35312421</span></span>
+<span><span class="co">#&gt;  [2,] -13.50089124  -9.11108690   1.79713519 -2.74284848</span></span>
+<span><span class="co">#&gt;  [3,]  -8.30048747   2.42902922  -5.89221657  0.24041504</span></span>
+<span><span class="co">#&gt;  [4,]   1.67803285   0.76997301  -3.61863740  1.35257624</span></span>
+<span><span class="co">#&gt;  [5,]  -2.31333719  -5.77611226  -4.16751019  1.55935662</span></span>
+<span><span class="co">#&gt;  [6,] -27.20948854   5.01664733   1.71320375  1.69502211</span></span>
+<span><span class="co">#&gt;  [7,] -11.53924438  -1.32704212   0.37488801 -1.07590362</span></span>
+<span><span class="co">#&gt;  [8,] -10.52195183  -0.74937149   2.46870301 -2.18860529</span></span>
+<span><span class="co">#&gt;  [9,]  11.93915794  -6.68524631  -0.78114090  0.14065720</span></span>
+<span><span class="co">#&gt; [10,]   2.90857069   0.09857903   1.43475296  2.54080801</span></span>
+<span><span class="co">#&gt; [11,]  -4.22662722   5.63897636  -0.75992016  1.18523960</span></span>
+<span><span class="co">#&gt; [12,]  11.21729466  -6.58230929  -0.69763216 -0.44553475</span></span>
+<span><span class="co">#&gt; [13,]  11.76870098  -8.12003515  -0.44887539 -0.42428346</span></span>
+<span><span class="co">#&gt; [14,]   8.61492991   6.80778546   1.01950682 -1.17174146</span></span>
+<span><span class="co">#&gt; [15,]  -2.63885151  -0.30425990  -2.27721394 -0.33321186</span></span>
+<span><span class="co">#&gt; [16,]  -9.84423032  -4.88350530   0.23395391  2.98731285</span></span>
+<span><span class="co">#&gt; [17,] -14.32332530  -6.44892755  -4.64933497 -1.34686336</span></span>
+<span><span class="co">#&gt; [18,]  -1.27647689 -10.14267573   1.09724286  1.83975359</span></span>
+<span><span class="co">#&gt; [19,] -12.01851652  -0.88860200   2.85413785  1.78024283</span></span>
+<span><span class="co">#&gt; [20,]  -7.49751789   0.90518422   2.53251108 -2.06764467</span></span>
+<span><span class="co">#&gt; [21,]   3.70958180  11.65012840   1.03525923  2.42328264</span></span>
+<span><span class="co">#&gt; [22,]   6.53972433   2.28849038  -0.29989444  0.85601375</span></span>
+<span><span class="co">#&gt; [23,]  10.68236211   1.57684077  -2.79007521  0.73904522</span></span>
+<span><span class="co">#&gt; [24,]   6.23525521   7.77884139  -2.89627716 -1.62285138</span></span>
+<span><span class="co">#&gt; [25,]   7.86457056  -2.36929347   2.21051873  0.12333510</span></span>
+<span><span class="co">#&gt; [26,] -10.05425476   8.61467906  -0.81334367  4.62947057</span></span>
+<span><span class="co">#&gt; [27,]  -3.70152919   5.94901244   1.38243735  2.18970560</span></span>
+<span><span class="co">#&gt; [28,]  -2.55724536  -9.76466732   2.07341983  0.92872290</span></span>
+<span><span class="co">#&gt; [29,]   2.25066152 -12.93256096   1.41579595  0.01121266</span></span>
+<span><span class="co">#&gt; [30,]   4.08395782  -3.06487755   1.10967447  0.96834948</span></span>
+<span><span class="co">#&gt; [31,]   4.27243668  -1.20039106   1.94652293 -0.02006664</span></span>
+<span><span class="co">#&gt; [32,]   0.06772707   7.03521654   1.48631653  0.09524844</span></span>
+<span><span class="co">#&gt; [33,]  -0.89581686   3.63416759   1.41384538 -1.40983377</span></span>
+<span><span class="co">#&gt; [34,]  -6.26902189  21.91218124   0.45398163 -0.93050925</span></span>
+<span><span class="co">#&gt; [35,]   2.27556068  -2.19712502   2.84005779 -1.98339256</span></span>
+<span><span class="co">#&gt; [36,]   1.87415219   7.55381324   1.97726412 -0.94662635</span></span>
+<span><span class="co">#&gt; [37,]  -1.04949457  12.61370671   1.15613339 -2.05363955</span></span>
+<span><span class="co">#&gt; [38,]   1.65346742   2.90483086   1.45968221 -2.86584307</span></span>
+<span><span class="co">#&gt; [39,]  11.98009486  -0.71497795   1.26110626  0.36935136</span></span>
+<span><span class="co">#&gt; [40,]  14.77876088  -4.04269064   0.93421343 -1.81526203</span></span>
+<span><span class="co">#&gt; [41,]  -2.51990646   3.73524802   2.41471713 -1.20668116</span></span>
+<span><span class="co">#&gt; [42,]   2.77386149   2.53137189   0.19562350 -2.24806954</span></span>
+<span><span class="co">#&gt; [43,]   6.83857818   4.24339807   1.20659676 -1.38354598</span></span>
+<span><span class="co">#&gt; [44,]  -1.77961535  -2.75542840   3.43534553  0.03437226</span></span>
+<span><span class="co">#&gt; [45,]  10.70286382   2.93485943   1.19032076 -1.67718929</span></span>
+<span><span class="co">#&gt; [46,]   7.49399613  -3.77801594   2.46341714  1.29217524</span></span>
+<span><span class="co">#&gt; [47,] -42.36628241  -8.76520545   4.97086441 -1.44319135</span></span>
+<span><span class="co">#&gt; [48,] -24.22446138  -6.38754714  -9.82666882 -0.50710578</span></span>
+<span><span class="co">#&gt; [49,]   0.13240425   5.31021704 -11.53099879 -0.59200525</span></span>
+<span><span class="co">#&gt; [50,]  -2.14733165   5.59148404   0.04051858 -0.43828914</span></span>
+<span><span class="co">#&gt; [51,]   1.25284200   6.98383229   0.63762120 -0.77478367</span></span>
+<span><span class="co">#&gt; [52,]   6.76125397  -4.37736497   3.04986115  1.67811821</span></span>
+<span><span class="co">#&gt; [53,]   5.19771634   0.40539870   0.56514378  0.71248814</span></span>
+<span><span class="co">#&gt; [54,]   3.52150287  -4.93579093  -0.13654685  0.94284241</span></span>
+<span><span class="co">#&gt; [55,]  10.02360265  -3.65840314   0.85647490 -1.56310331</span></span>
+<span><span class="co">#&gt; [56,]   6.32269161  -0.40546923   1.78126446  4.22904619</span></span>
+<span><span class="co">#&gt; [57,]  15.30911808  -8.65424313  -3.59471831 -2.87420152</span></span>
+<span><span class="co">#&gt; [58,]   9.61147274  -3.36319151  -1.19747251  1.83007687</span></span>
+<span><span class="co">#&gt; [59,]  -0.37962981  -0.28874022  -1.80806881  0.09620502</span></span>
+<span><span class="co">#&gt; [60,]   8.62662402  -2.77689303  -1.32620405 -0.04616036</span></span>
+<span><span class="co">#&gt; [61,]   6.54791557   0.18629405  -1.38783253  2.08166593</span></span>
+<span><span class="co">#&gt;                PC5</span></span>
+<span><span class="co">#&gt;  [1,] -0.281419035</span></span>
+<span><span class="co">#&gt;  [2,] -0.004409154</span></span>
+<span><span class="co">#&gt;  [3,] -0.325234441</span></span>
+<span><span class="co">#&gt;  [4,] -0.325379930</span></span>
+<span><span class="co">#&gt;  [5,] -0.161937766</span></span>
+<span><span class="co">#&gt;  [6,] -0.135732724</span></span>
+<span><span class="co">#&gt;  [7,] -0.106860604</span></span>
+<span><span class="co">#&gt;  [8,]  0.146410475</span></span>
+<span><span class="co">#&gt;  [9,]  0.339512953</span></span>
+<span><span class="co">#&gt; [10,] -0.218338448</span></span>
+<span><span class="co">#&gt; [11,] -0.366973284</span></span>
+<span><span class="co">#&gt; [12,] -0.223623495</span></span>
+<span><span class="co">#&gt; [13,] -0.252236221</span></span>
+<span><span class="co">#&gt; [14,] -0.064193706</span></span>
+<span><span class="co">#&gt; [15,]  0.079385117</span></span>
+<span><span class="co">#&gt; [16,] -0.578778520</span></span>
+<span><span class="co">#&gt; [17,] -0.326057864</span></span>
+<span><span class="co">#&gt; [18,] -0.262918633</span></span>
+<span><span class="co">#&gt; [19,]  0.185057340</span></span>
+<span><span class="co">#&gt; [20,] -0.025466818</span></span>
+<span><span class="co">#&gt; [21,] -0.575103051</span></span>
+<span><span class="co">#&gt; [22,]  0.010524588</span></span>
+<span><span class="co">#&gt; [23,]  1.735756491</span></span>
+<span><span class="co">#&gt; [24,] -0.205736270</span></span>
+<span><span class="co">#&gt; [25,] -0.012710470</span></span>
+<span><span class="co">#&gt; [26,]  1.142817998</span></span>
+<span><span class="co">#&gt; [27,]  0.194455278</span></span>
+<span><span class="co">#&gt; [28,] -0.323278854</span></span>
+<span><span class="co">#&gt; [29,] -0.110941682</span></span>
+<span><span class="co">#&gt; [30,] -0.509724275</span></span>
+<span><span class="co">#&gt; [31,] -0.403969336</span></span>
+<span><span class="co">#&gt; [32,] -0.286508631</span></span>
+<span><span class="co">#&gt; [33,] -0.109520935</span></span>
+<span><span class="co">#&gt; [34,]  0.387464462</span></span>
+<span><span class="co">#&gt; [35,] -0.010326808</span></span>
+<span><span class="co">#&gt; [36,]  0.017552430</span></span>
+<span><span class="co">#&gt; [37,]  0.023366776</span></span>
+<span><span class="co">#&gt; [38,] -0.162939168</span></span>
+<span><span class="co">#&gt; [39,] -0.110648611</span></span>
+<span><span class="co">#&gt; [40,]  0.227289567</span></span>
+<span><span class="co">#&gt; [41,] -0.175098878</span></span>
+<span><span class="co">#&gt; [42,] -0.227413622</span></span>
+<span><span class="co">#&gt; [43,] -0.037211916</span></span>
+<span><span class="co">#&gt; [44,]  0.085079555</span></span>
+<span><span class="co">#&gt; [45,]  0.021369217</span></span>
+<span><span class="co">#&gt; [46,] -0.091645314</span></span>
+<span><span class="co">#&gt; [47,]  0.847525584</span></span>
+<span><span class="co">#&gt; [48,] -0.007532702</span></span>
+<span><span class="co">#&gt; [49,] -0.150576006</span></span>
+<span><span class="co">#&gt; [50,] -0.224401674</span></span>
+<span><span class="co">#&gt; [51,]  0.062522325</span></span>
+<span><span class="co">#&gt; [52,]  0.106851844</span></span>
+<span><span class="co">#&gt; [53,]  0.081161521</span></span>
+<span><span class="co">#&gt; [54,]  0.394161422</span></span>
+<span><span class="co">#&gt; [55,]  0.219167679</span></span>
+<span><span class="co">#&gt; [56,]  0.013383974</span></span>
+<span><span class="co">#&gt; [57,]  0.973097369</span></span>
+<span><span class="co">#&gt; [58,]  0.438319159</span></span>
+<span><span class="co">#&gt; [59,] -0.189279132</span></span>
+<span><span class="co">#&gt; [60,] -0.212210738</span></span>
+<span><span class="co">#&gt; [61,]  0.064105593</span></span>
+<span><span class="co"># b. Calculate the square distance between each individual and the PCA center of gravity</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="va">d2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">ind.coord</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">cos2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">ind.coord</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>  <span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">d2</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">cos2</span></span>
+<span><span class="co">#&gt;        PC1  PC2  PC3  PC4  PC5</span></span>
+<span><span class="co">#&gt;  [1,] 0.81 0.01 0.11 0.08 0.00</span></span>
+<span><span class="co">#&gt;  [2,] 0.66 0.30 0.01 0.03 0.00</span></span>
+<span><span class="co">#&gt;  [3,] 0.63 0.05 0.32 0.00 0.00</span></span>
+<span><span class="co">#&gt;  [4,] 0.15 0.03 0.71 0.10 0.01</span></span>
+<span><span class="co">#&gt;  [5,] 0.09 0.57 0.30 0.04 0.00</span></span>
+<span><span class="co">#&gt;  [6,] 0.96 0.03 0.00 0.00 0.00</span></span>
+<span><span class="co">#&gt;  [7,] 0.98 0.01 0.00 0.01 0.00</span></span>
+<span><span class="co">#&gt;  [8,] 0.91 0.00 0.05 0.04 0.00</span></span>
+<span><span class="co">#&gt;  [9,] 0.76 0.24 0.00 0.00 0.00</span></span>
+<span><span class="co">#&gt; [10,] 0.50 0.00 0.12 0.38 0.00</span></span>
+<span><span class="co">#&gt; [11,] 0.35 0.61 0.01 0.03 0.00</span></span>
+<span><span class="co">#&gt; [12,] 0.74 0.26 0.00 0.00 0.00</span></span>
+<span><span class="co">#&gt; [13,] 0.68 0.32 0.00 0.00 0.00</span></span>
+<span><span class="co">#&gt; [14,] 0.60 0.38 0.01 0.01 0.00</span></span>
+<span><span class="co">#&gt; [15,] 0.56 0.01 0.42 0.01 0.00</span></span>
+<span><span class="co">#&gt; [16,] 0.75 0.18 0.00 0.07 0.00</span></span>
+<span><span class="co">#&gt; [17,] 0.76 0.15 0.08 0.01 0.00</span></span>
+<span><span class="co">#&gt; [18,] 0.01 0.94 0.01 0.03 0.00</span></span>
+<span><span class="co">#&gt; [19,] 0.92 0.01 0.05 0.02 0.00</span></span>
+<span><span class="co">#&gt; [20,] 0.83 0.01 0.09 0.06 0.00</span></span>
+<span><span class="co">#&gt; [21,] 0.09 0.87 0.01 0.04 0.00</span></span>
+<span><span class="co">#&gt; [22,] 0.88 0.11 0.00 0.02 0.00</span></span>
+<span><span class="co">#&gt; [23,] 0.89 0.02 0.06 0.00 0.02</span></span>
+<span><span class="co">#&gt; [24,] 0.35 0.55 0.08 0.02 0.00</span></span>
+<span><span class="co">#&gt; [25,] 0.85 0.08 0.07 0.00 0.00</span></span>
+<span><span class="co">#&gt; [26,] 0.51 0.37 0.00 0.11 0.01</span></span>
+<span><span class="co">#&gt; [27,] 0.25 0.63 0.03 0.09 0.00</span></span>
+<span><span class="co">#&gt; [28,] 0.06 0.89 0.04 0.01 0.00</span></span>
+<span><span class="co">#&gt; [29,] 0.03 0.96 0.01 0.00 0.00</span></span>
+<span><span class="co">#&gt; [30,] 0.59 0.33 0.04 0.03 0.01</span></span>
+<span><span class="co">#&gt; [31,] 0.77 0.06 0.16 0.00 0.01</span></span>
+<span><span class="co">#&gt; [32,] 0.00 0.96 0.04 0.00 0.00</span></span>
+<span><span class="co">#&gt; [33,] 0.04 0.73 0.11 0.11 0.00</span></span>
+<span><span class="co">#&gt; [34,] 0.08 0.92 0.00 0.00 0.00</span></span>
+<span><span class="co">#&gt; [35,] 0.24 0.22 0.37 0.18 0.00</span></span>
+<span><span class="co">#&gt; [36,] 0.05 0.87 0.06 0.01 0.00</span></span>
+<span><span class="co">#&gt; [37,] 0.01 0.96 0.01 0.03 0.00</span></span>
+<span><span class="co">#&gt; [38,] 0.13 0.39 0.10 0.38 0.00</span></span>
+<span><span class="co">#&gt; [39,] 0.98 0.00 0.01 0.00 0.00</span></span>
+<span><span class="co">#&gt; [40,] 0.91 0.07 0.00 0.01 0.00</span></span>
+<span><span class="co">#&gt; [41,] 0.23 0.51 0.21 0.05 0.00</span></span>
+<span><span class="co">#&gt; [42,] 0.40 0.33 0.00 0.26 0.00</span></span>
+<span><span class="co">#&gt; [43,] 0.69 0.26 0.02 0.03 0.00</span></span>
+<span><span class="co">#&gt; [44,] 0.14 0.34 0.52 0.00 0.00</span></span>
+<span><span class="co">#&gt; [45,] 0.90 0.07 0.01 0.02 0.00</span></span>
+<span><span class="co">#&gt; [46,] 0.72 0.18 0.08 0.02 0.00</span></span>
+<span><span class="co">#&gt; [47,] 0.95 0.04 0.01 0.00 0.00</span></span>
+<span><span class="co">#&gt; [48,] 0.81 0.06 0.13 0.00 0.00</span></span>
+<span><span class="co">#&gt; [49,] 0.00 0.17 0.82 0.00 0.00</span></span>
+<span><span class="co">#&gt; [50,] 0.13 0.87 0.00 0.01 0.00</span></span>
+<span><span class="co">#&gt; [51,] 0.03 0.95 0.01 0.01 0.00</span></span>
+<span><span class="co">#&gt; [52,] 0.59 0.25 0.12 0.04 0.00</span></span>
+<span><span class="co">#&gt; [53,] 0.96 0.01 0.01 0.02 0.00</span></span>
+<span><span class="co">#&gt; [54,] 0.33 0.64 0.00 0.02 0.00</span></span>
+<span><span class="co">#&gt; [55,] 0.86 0.11 0.01 0.02 0.00</span></span>
+<span><span class="co">#&gt; [56,] 0.65 0.00 0.05 0.29 0.00</span></span>
+<span><span class="co">#&gt; [57,] 0.71 0.23 0.04 0.02 0.00</span></span>
+<span><span class="co">#&gt; [58,] 0.85 0.10 0.01 0.03 0.00</span></span>
+<span><span class="co">#&gt; [59,] 0.04 0.02 0.92 0.00 0.01</span></span>
+<span><span class="co">#&gt; [60,] 0.89 0.09 0.02 0.00 0.00</span></span>
+<span><span class="co">#&gt; [61,] 0.87 0.00 0.04 0.09 0.00</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">cos2</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] 0.82 0.96 0.68 0.18 0.66 0.99 0.99 0.91 1.00 0.50 0.96</span></span>
+<span><span class="co">#&gt; [12] 1.00 1.00 0.98 0.57 0.93 0.91 0.95 0.93 0.84 0.96 0.99</span></span>
+<span><span class="co">#&gt; [23] 0.91 0.90 0.93 0.88 0.88 0.95 0.99 0.92 0.83 0.96 0.77</span></span>
+<span><span class="co">#&gt; [34] 1.00 0.46 0.92 0.97 0.52 0.98 0.98 0.74 0.73 0.95 0.48</span></span>
+<span><span class="co">#&gt; [45] 0.97 0.90 0.99 0.87 0.17 1.00 0.98 0.84 0.97 0.97 0.97</span></span>
+<span><span class="co">#&gt; [56] 0.65 0.94 0.95 0.06 0.98 0.87</span></span>
+<span></span>
+<span><span class="co"># (3) Graph of variables. Positive correlated variables point to the same side of the plot. Negative correlated variables point to opposite sides of the graph.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html">fviz_pca_var</a></span><span class="op">(</span><span class="va">X.pc</span>,</span>
+<span>             col.var <span class="op">=</span> <span class="st">"contrib"</span>, <span class="co"># Color by contributions to the PC</span></span>
+<span>             gradient.cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#00AFBB"</span>, <span class="st">"#E7B800"</span>, <span class="st">"#FC4E07"</span><span class="op">)</span>,</span>
+<span>             repel <span class="op">=</span> <span class="cn">TRUE</span>     <span class="co"># Avoid text overlapping</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-5.png" width="672"></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># (4) Biplot of individuals and variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html">fviz_pca_biplot</a></span><span class="op">(</span><span class="va">X.pc</span>, </span>
+<span>                repel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                col.var <span class="op">=</span> <span class="st">"#2E9FDF"</span>, <span class="co"># Variables color</span></span>
+<span>                col.ind <span class="op">=</span> <span class="st">"#696969"</span>  <span class="co"># Individuals color</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-2-6.png" width="672"></div>
+</div>
+<div id="example-8.10-example-8.11" class="section level2" number="1.2">
+<h2>
+<span class="header-section-number">1.2</span> Example 8.10, Example 8.11<a class="anchor" aria-label="anchor" href="#example-8.10-example-8.11"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-2.dat"</span>,header<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">X</span></span>
+<span><span class="co">#&gt;         V1      V2      V3      V4     V5</span></span>
+<span><span class="co">#&gt; 1   2044.9   588.2   425.8  -189.1 -209.8</span></span>
+<span><span class="co">#&gt; 2  -2143.7  -686.2   883.6  -565.9 -441.5</span></span>
+<span><span class="co">#&gt; 3   -177.8  -464.6   707.5   736.3   38.2</span></span>
+<span><span class="co">#&gt; 4  -2186.2   450.5  -184.0   443.7 -325.3</span></span>
+<span><span class="co">#&gt; 5   -878.6  -545.8   115.7   296.4  437.5</span></span>
+<span><span class="co">#&gt; 6    563.2 -1045.4   281.2   620.5  142.7</span></span>
+<span><span class="co">#&gt; 7    403.1    66.8   340.6  -135.5  521.2</span></span>
+<span><span class="co">#&gt; 8  -1988.9  -801.8 -1437.3  -148.8   61.6</span></span>
+<span><span class="co">#&gt; 9    132.8   563.7   125.3    68.2  611.5</span></span>
+<span><span class="co">#&gt; 10 -2787.3  -213.4     7.8   169.4 -202.3</span></span>
+<span><span class="co">#&gt; 11   283.4  3936.9    -0.9   276.2 -159.6</span></span>
+<span><span class="co">#&gt; 12   761.6   256.0 -2153.6  -418.8   28.2</span></span>
+<span><span class="co">#&gt; 13  -498.3   244.7   966.5 -1142.3  182.6</span></span>
+<span><span class="co">#&gt; 14  2366.2 -1193.7  -165.5   270.6 -344.9</span></span>
+<span><span class="co">#&gt; 15  1917.8  -782.0   -82.9  -196.8  -89.9</span></span>
+<span><span class="co">#&gt; 16  2187.7  -373.9   170.1   -84.1 -250.2</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">X.pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co"># values of the principal components</span></span>
+<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">X.pc</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">Y</span></span>
+<span><span class="co">#&gt;              PC1         PC2           PC3         PC4</span></span>
+<span><span class="co">#&gt;  [1,] -2044.9108  -588.18998   425.8014318  -189.11860</span></span>
+<span><span class="co">#&gt;  [2,]  2143.6969   686.18028   883.6071505  -565.91372</span></span>
+<span><span class="co">#&gt;  [3,]   177.7921   464.60169   707.5038436   736.30458</span></span>
+<span><span class="co">#&gt;  [4,]  2186.1878  -450.51761  -183.9938258   443.69157</span></span>
+<span><span class="co">#&gt;  [5,]   878.5975   545.80132   115.7107748   296.42832</span></span>
+<span><span class="co">#&gt;  [6,]  -563.2024  1045.40708   281.2031894   620.50453</span></span>
+<span><span class="co">#&gt;  [7,]  -403.1044   -66.79005   340.6113523  -135.47071</span></span>
+<span><span class="co">#&gt;  [8,]  1988.9026   801.78641 -1437.2896124  -148.79412</span></span>
+<span><span class="co">#&gt;  [9,]  -132.8076  -563.69033   125.3126666    68.23589</span></span>
+<span><span class="co">#&gt; [10,]  2787.2934   213.38002     7.8088146   169.40070</span></span>
+<span><span class="co">#&gt; [11,]  -283.4329 -3936.89991    -0.8923354   276.19734</span></span>
+<span><span class="co">#&gt; [12,]  -761.6016  -255.99816 -2153.5931791  -418.80896</span></span>
+<span><span class="co">#&gt; [13,]   498.2963  -244.70169   966.5134292 -1142.28340</span></span>
+<span><span class="co">#&gt; [14,] -2366.2012  1193.71037  -165.5042865   270.56662</span></span>
+<span><span class="co">#&gt; [15,] -1917.8007   782.01030   -82.8986585  -196.81567</span></span>
+<span><span class="co">#&gt; [16,] -2187.7050   373.91026   170.0992449   -84.12436</span></span>
+<span><span class="co">#&gt;              PC5</span></span>
+<span><span class="co">#&gt;  [1,]  209.77628</span></span>
+<span><span class="co">#&gt;  [2,]  441.49580</span></span>
+<span><span class="co">#&gt;  [3,]  -38.14340</span></span>
+<span><span class="co">#&gt;  [4,]  325.32683</span></span>
+<span><span class="co">#&gt;  [5,] -437.47036</span></span>
+<span><span class="co">#&gt;  [6,] -142.64953</span></span>
+<span><span class="co">#&gt;  [7,] -521.20697</span></span>
+<span><span class="co">#&gt;  [8,]  -61.60321</span></span>
+<span><span class="co">#&gt;  [9,] -611.50329</span></span>
+<span><span class="co">#&gt; [10,]  202.32507</span></span>
+<span><span class="co">#&gt; [11,]  159.55944</span></span>
+<span><span class="co">#&gt; [12,]  -28.25294</span></span>
+<span><span class="co">#&gt; [13,] -182.65658</span></span>
+<span><span class="co">#&gt; [14,]  344.92000</span></span>
+<span><span class="co">#&gt; [15,]   89.89036</span></span>
+<span><span class="co">#&gt; [16,]  250.19249</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_eig</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># covariance matrix of first two sample PCs: y1 and y2</span></span>
+<span><span class="va">Y12</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">S</span></span>
+<span><span class="co">#&gt;         [,1]    [,2]</span></span>
+<span><span class="co">#&gt; [1,] 2770248       0</span></span>
+<span><span class="co">#&gt; [2,]       0 1429193</span></span>
+<span></span>
+<span><span class="co">## Two-part procedure</span></span>
+<span><span class="co"># (i) ellipse format chart for the first two PCs (y1, y2)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span></span>
+<span><span class="va">radius</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">alpha</span>, df <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>pty <span class="op">=</span> <span class="st">"s"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">0</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5000</span>, <span class="fl">5000</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4000</span>, <span class="fl">4000</span><span class="op">)</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hat</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Ellipses.html">ellipse</a></span><span class="op">(</span>center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">Y12</span><span class="op">)</span>, shape <span class="op">=</span> <span class="va">S</span>, radius <span class="op">=</span> <span class="va">radius</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">Y12</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">Y12</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-3-2.png" width="672"></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># (ii) T^2 chart for the last p-2 PCs</span></span>
+<span><span class="va">T2</span> <span class="op">&lt;-</span> <span class="va">Y</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span></span>
+<span>  <span class="va">Y</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span></span>
+<span>  <span class="va">Y</span><span class="op">[</span>, <span class="fl">5</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span><span class="op">^</span><span class="fl">2</span></span>
+<span></span>
+<span><span class="va">UCL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">alpha</span>, df <span class="op">=</span> <span class="va">p</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span>, <span class="va">T2</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">T2</span>, <span class="va">UCL</span><span class="op">*</span><span class="fl">1.05</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'p'</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Period"</span>, ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="cn">T</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="cn">T</span><span class="op">^</span><span class="fl">2</span>,<span class="st">"-chart"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">UCL</span>, lty <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span>, <span class="va">T2</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-3-3.png" width="672"></div>
+</div>
+<div id="homework" class="section level2" number="1.3">
+<h2>
+<span class="header-section-number">1.3</span> Homework<a class="anchor" aria-label="anchor" href="#homework"><i class="fas fa-link"></i></a>
+</h2>
+<div id="exercise-8.1-8.2" class="section level3" number="1.3.1">
+<h3>
+<span class="header-section-number">1.3.1</span> Exercise 8.1, 8.2<a class="anchor" aria-label="anchor" href="#exercise-8.1-8.2"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span>,</span>
+<span>                  <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/eigen.html">eigen</a></span><span class="op">(</span><span class="va">Sigma</span><span class="op">)</span></span>
+<span><span class="co">#&gt; eigen() decomposition</span></span>
+<span><span class="co">#&gt; $values</span></span>
+<span><span class="co">#&gt; [1] 6 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vectors</span></span>
+<span><span class="co">#&gt;            [,1]       [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.8944272  0.4472136</span></span>
+<span><span class="co">#&gt; [2,] -0.4472136 -0.8944272</span></span>
+<span></span>
+<span><span class="va">V</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">Sigma</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">Sigma</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/eigen.html">eigen</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span></span>
+<span><span class="co">#&gt; eigen() decomposition</span></span>
+<span><span class="co">#&gt; $values</span></span>
+<span><span class="co">#&gt; [1] 1.6324555 0.3675445</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vectors</span></span>
+<span><span class="co">#&gt;           [,1]       [,2]</span></span>
+<span><span class="co">#&gt; [1,] 0.7071068 -0.7071068</span></span>
+<span><span class="co">#&gt; [2,] 0.7071068  0.7071068</span></span>
+<span></span>
+<span><span class="co"># the correlation coefficients between the PC Y_i and the standardized variable Z_k</span></span>
+<span><span class="co"># Y_i, Z_k</span></span>
+<span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">ed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eigen.html">eigen</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span></span>
+<span><span class="va">ed</span><span class="op">$</span><span class="va">vector</span><span class="op">[</span><span class="va">k</span>, <span class="va">i</span><span class="op">]</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">ed</span><span class="op">$</span><span class="va">values</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.9034532</span></span></code></pre></div>
+</div>
+<div id="exercise-8.22" class="section level3" number="1.3.2">
+<h3>
+<span class="header-section-number">1.3.2</span> Exercise 8.22<a class="anchor" aria-label="anchor" href="#exercise-8.22"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T1-10.dat"</span>,header<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">mydata</span><span class="op">[</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># use covariance matrix</span></span>
+<span><span class="va">X.pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co"># proportion of variance</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,<span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.8082 0.1914 0.0002 0.0001 0.0000 0.0000 0.0000</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_eig</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># use correlation matrix</span></span>
+<span><span class="va">Z.pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">X</span>, scale <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co"># proportion of variance</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">Z.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">Z.pc</span><span class="op">$</span><span class="va">sdev</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,<span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.5887 0.1910 0.1059 0.0602 0.0265 0.0209 0.0067</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_eig</a></span><span class="op">(</span><span class="va">Z.pc</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-5-2.png" width="672"></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">pc1</span> <span class="op">&lt;-</span> <span class="va">X.pc</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">pc2</span> <span class="op">&lt;-</span> <span class="va">X.pc</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">pc1</span>,<span class="va">pc2</span>,type<span class="op">=</span><span class="st">'n'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html">text</a></span><span class="op">(</span><span class="va">pc1</span>,<span class="va">pc2</span>,<span class="va">mydata</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-5-3.png" width="672"></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm</a></span><span class="op">(</span><span class="va">pc1</span>, pch <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqline</a></span><span class="op">(</span><span class="va">pc1</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-PCA_R_files/figure-html/unnamed-chunk-5-4.png" width="672"></div>
+</div>
+</div>
+<div id="reference" class="section level2" number="1.4">
+<h2>
+<span class="header-section-number">1.4</span> Reference<a class="anchor" aria-label="anchor" href="#reference"><i class="fas fa-link"></i></a>
+</h2>
+<p>[1] Johnson, R. A., and Wichern, D. W. (2007). Applied multivariate statistical analysis (6th ed.). Upper Saddle River, N.J.: Pearson Prentice Hall.</p>
+<p>[2] Zelterman, D. (2015). Applied Multivariate Statistics with R (1st ed.).</p>
+<p>[3] Principal Component Analysis in R: prcomp vs princomp, <a href="http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/" class="uri">http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/118-principal-component-analysis-in-r-prcomp-vs-princomp/</a></p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html">About</a></div>
+<div class="next"><a href="chapter-9-factor-analysis.html"><span class="header-section-number">2</span> Chapter 9: Factor Analysis</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#chapter-8-principle-component-analysis"><span class="header-section-number">1</span> Chapter 8: Principle Component Analysis</a></li>
+<li><a class="nav-link" href="#example-8.3-exercise-8.11"><span class="header-section-number">1.1</span> Example 8.3, Exercise 8.11</a></li>
+<li><a class="nav-link" href="#example-8.10-example-8.11"><span class="header-section-number">1.2</span> Example 8.10, Example 8.11</a></li>
+<li>
+<a class="nav-link" href="#homework"><span class="header-section-number">1.3</span> Homework</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#exercise-8.1-8.2"><span class="header-section-number">1.3.1</span> Exercise 8.1, 8.2</a></li>
+<li><a class="nav-link" href="#exercise-8.22"><span class="header-section-number">1.3.2</span> Exercise 8.22</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#reference"><span class="header-section-number">1.4</span> Reference</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/rstudio/bookdown-demo/blob/master/08-PCA_R.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/rstudio/bookdown-demo/edit/master/08-PCA_R.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Lecture notes for STA 6707 Multivariate Methods</strong>" was written by Fei Heng. It was last built on 2023-08-15.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

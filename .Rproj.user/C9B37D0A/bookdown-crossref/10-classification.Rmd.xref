@@ -1,0 +1,42 @@
+h1:chapter-10-discrimination-and-classification Chapter 10: Discrimination and Classification
+h2:an-introductory-example 10.1 An Introductory Example
+h2:multinomial-logistic-regression 10.2 Multinomial Logistic Regression
+h3:two-groups Two groups
+h3:more-than-two-groups More than two groups
+h3:graphical-diagnostics Graphical diagnostics
+h2:linear-discriminant-analysis 10.3 Linear Discriminant Analysis
+h3:wine-data-example Wine data example
+h3:methodology Methodology
+h4:prior-probabilities Prior probabilities:
+h3:an-illustrative-example-mixture-of-two-normal-distributions An illustrative example (mixture of two normal distributions)
+h4:fisher-linear-discriminant-function Fisher linear discriminant function
+h3:quadratic-discriminant-analysis-qda Quadratic Discriminant Analysis (QDA)
+h2:support-vector-machine 10.4 Support Vector Machine
+h3:example-linear-svm-classifier Example (linear SVM classifier)
+h3:example-kernel-svm-classifier Example (kernel SVM classifier)
+h3:cross-validation Cross Validation
+h3:application-to-the-wine-data Application to the wine data
+h3:maximal-margin-classifier Maximal Margin Classifier
+h4:what-is-a-hyperplane What Is a Hyperplane?
+h4:classification-using-a-separating-hyperplane Classification Using a Separating Hyperplane
+h4:the-maximal-margin-classifier The Maximal Margin Classifier
+h4:construction-of-the-maximal-margin-classifier Construction of the Maximal Margin Classifier
+h3:support-vector-classifier Support Vector Classifier
+h4:a-non-separable-case A non-separable case
+h4:details-of-the-support-vector-classifier Details of the Support Vector Classifier
+h5:slack-variable slack variable
+h5:tuning-parameter Tuning parameter
+h3:support-vectot-machine Support Vectot Machine
+h4:classification-with-non-linear-decision-boundaries Classification with Non-linear Decision Boundaries
+h4:details-of-the-support-vector-machine Details of the Support Vector Machine
+h4:the-property-of-alpha_i The property of 
+h4:kernel-enlarge-the-feature-space Kernel (enlarge the feature space)
+h4:svms-with-more-than-two-classes-k2-classes SVMs with More than Two Classes ( classes)
+h5:one-versus-one-classification One-Versus-One Classification
+h5:one-versus-all-classification One-Versus-All Classification
+h3:lab-support-vector-machines Lab: Support Vector Machines
+h4:support-vector-classifier-1 Support Vector Classifier
+h4:support-vector-machine-1 Support Vector Machine
+h2:final-project-apply-the-svm-method-to-the-heart-disease-data Final Project (Apply the SVM method to the Heart Disease Data)
+h2:reference Reference
+

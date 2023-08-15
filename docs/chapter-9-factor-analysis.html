@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 2 Chapter 9: Factor Analysis | Lecture notes for STA 6707 Multivariate Methods</title>
+<meta name="author" content="Fei Heng">
+<meta name="description" content="2.1 Overview of FA The essential purpose of FA: to describe the covariance relationships among many variables in terms of a few understanding, but unobservable, random quantities called factors....">
+<meta name="generator" content="bookdown 0.35 with bs4_book()">
+<meta property="og:title" content="Chapter 2 Chapter 9: Factor Analysis | Lecture notes for STA 6707 Multivariate Methods">
+<meta property="og:type" content="book">
+<meta property="og:description" content="2.1 Overview of FA The essential purpose of FA: to describe the covariance relationships among many variables in terms of a few understanding, but unobservable, random quantities called factors....">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 2 Chapter 9: Factor Analysis | Lecture notes for STA 6707 Multivariate Methods">
+<meta name="twitter:description" content="2.1 Overview of FA The essential purpose of FA: to describe the covariance relationships among many variables in terms of a few understanding, but unobservable, random quantities called factors....">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Lecture notes for STA 6707 Multivariate Methods</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">About</a></li>
+<li><a class="" href="chapter-8-principle-component-analysis.html"><span class="header-section-number">1</span> Chapter 8: Principle Component Analysis</a></li>
+<li><a class="active" href="chapter-9-factor-analysis.html"><span class="header-section-number">2</span> Chapter 9: Factor Analysis</a></li>
+<li><a class="" href="chapter-10-discrimination-and-classification.html"><span class="header-section-number">3</span> Chapter 10: Discrimination and Classification</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/rstudio/bookdown-demo">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="chapter-9-factor-analysis" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Chapter 9: Factor Analysis<a class="anchor" aria-label="anchor" href="#chapter-9-factor-analysis"><i class="fas fa-link"></i></a>
+</h1>
+<hr>
+<div id="overview-of-fa" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Overview of FA<a class="anchor" aria-label="anchor" href="#overview-of-fa"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li><p><strong>The essential purpose of FA</strong>: to describe the covariance relationships among many variables in terms of a few understanding, but unobservable, random quantities called <strong>factors</strong>.</p></li>
+<li>
+<p><strong>Basic objective 1</strong>: to determine whether the <span class="math inline">\(p\)</span> variables exhibit patterns of relationship with each other such that</p>
+<ul>
+<li>the variables can be partitioned into, say, <span class="math inline">\(m\)</span> subsets (<span class="math inline">\(m&lt;p\)</span>),</li>
+<li>each subset consists of a group of variables tending to be more highly related to others within the subset than to those in other subsets.</li>
+</ul>
+</li>
+<li>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>Correlations from the group of test scores in classics, French, English, mathematics, and music collected by <em>Spearman</em> suggested <strong>an underlying “intelligence” factor</strong>.</li>
+<li>A second group of variables: physical-fitness scores, if available, might correspond to <strong>another factor</strong>.</li>
+<li>FA seeks to confirm such type of structure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Basic objective 2</strong>: to derive, create, or develop a new set of uncorrelated variables</p>
+<ul>
+<li>the new variables are called <strong>underlying factors</strong> or <strong>underlying characteristics</strong>
+</li>
+<li>we hope the new variables give a better understanding of the data being analyzed</li>
+<li>the new variables can then be used in future analyses of the data</li>
+</ul>
+</li>
+<li><p>The factor analysis model assumes there is a smaller set of uncorrelated variables that, in some sense, drives or controls the values of the variables that are actually being measured.</p></li>
+<li><p><strong>The difference between PCA and FA</strong>: PCA is a linear combination of variables; Factor Analysis is a measurement model of a latent variable.</p></li>
+</ul>
+</div>
+<div id="warnings" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Warnings<a class="anchor" aria-label="anchor" href="#warnings"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>If the original variables are already uncorrelated, then there is little reason to consider performing a FA.</li>
+<li>Criticism on FA:
+<ul>
+<li>There is no unique solution to FA.</li>
+<li>Subjective decisions are made for determining
+<ul>
+<li>the number of underlying factors</li>
+<li>how they are created</li>
+<li>how they should be interpreted</li>
+<li>how individuals in the sample should be evaluated on the</li>
+<li>new variables</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="the-orthogonal-factor-model" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> The Orthogonal Factor Model<a class="anchor" aria-label="anchor" href="#the-orthogonal-factor-model"><i class="fas fa-link"></i></a>
+</h2>
+<p><span class="math inline">\(\vec X\)</span> is a <span class="math inline">\(p\)</span>-dimensional random vector <span class="math inline">\(\sim (\vec \mu, \mathbf{\Sigma})\)</span>.</p>
+<p>The factor analysis model is
+<span class="math display">\[X_i - \mu_i=l_{i1}F_1+l_{i2}F_2+\dots+l_{im}F_m+\epsilon_i,\]</span></p>
+<ul>
+<li>
+<span class="math inline">\(X_i\)</span> is the <span class="math inline">\(i\)</span>-th component of <span class="math inline">\(\vec X\)</span>.</li>
+<li>
+<span class="math inline">\(F_1, F_2, \dots, F_m\)</span> are called <strong>common factors</strong>
+</li>
+<li>
+<span class="math inline">\(\epsilon_1, \epsilon_2, \dots, \epsilon_p\)</span> are called <strong>errors</strong> or <strong>specific factors</strong>
+</li>
+<li>
+<span class="math inline">\(l_{ij}\)</span> is called the <strong>loading</strong> of the <span class="math inline">\(i\)</span>th variable on the <span class="math inline">\(j\)</span>th factor</li>
+</ul>
+<p>or in matrix notation:</p>
+<p><span class="math display">\[\underset{(p\times 1)}{\vec X - \vec \mu}=\underset{(p\times m)}{\mathbf{L}}\underset{(m\times 1)}{\vec F}+\underset{(p\times 1)}{\vec \epsilon}\]</span></p>
+<ul>
+<li>
+<span class="math inline">\(\mathbf{L}\)</span>: <strong>matrix of factor loadings</strong>
+</li>
+</ul>
+<div id="orthogonal-factor-model-with-m-common-factors" class="section level3" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> Orthogonal Factor Model with <span class="math inline">\(m\)</span> Common Factors<a class="anchor" aria-label="anchor" href="#orthogonal-factor-model-with-m-common-factors"><i class="fas fa-link"></i></a>
+</h3>
+<p><span class="math display">\[\underset{(p\times 1)}{\vec X}=\underset{(p\times 1)}{\vec \mu}+\underset{(p\times m)}{\mathbf{L}}\underset{(m\times 1)}{\vec F}+\underset{(p\times 1)}{\vec \epsilon}\]</span></p>
+<p><span class="math inline">\(\mu_i\)</span>: mean of variable <span class="math inline">\(i\)</span></p>
+<p><span class="math inline">\(\epsilon_i\)</span>: <span class="math inline">\(i\)</span>th specific factor</p>
+<p><span class="math inline">\(F_j\)</span>: <span class="math inline">\(j\)</span>th common factor</p>
+<p><span class="math inline">\(l_{ij}\)</span>: loading of the <span class="math inline">\(i\)</span>th variable on the <span class="math inline">\(j\)</span>th factor</p>
+<p><strong>Assumptions</strong>:</p>
+<p><span class="math inline">\(\vec F\)</span> and <span class="math inline">\(\vec \epsilon\)</span> are independent</p>
+<p><span class="math inline">\(E(\vec F)=\vec 0, Cov(\vec F)=\mathbf{I}\)</span></p>
+<p><span class="math inline">\(E(\vec \epsilon)=\vec 0, Cov(\vec \epsilon)=\mathbf{\Psi}\)</span>, where <span class="math inline">\(\mathbf{\Psi}\)</span> is a diagonal matrix</p>
+</div>
+<div id="covariance-structure-of-vec-x-under-the-orthogonal-factor-model" class="section level3" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> Covariance Structure of <span class="math inline">\(\vec X\)</span> under the Orthogonal Factor Model<a class="anchor" aria-label="anchor" href="#covariance-structure-of-vec-x-under-the-orthogonal-factor-model"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<span class="math inline">\(\mathbf{\Sigma}=Cov(\vec X) = \mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span> (<strong>factor analysis equation</strong>)</li>
+<li><span class="math inline">\(Cov(\vec X, \vec F) = \mathbf{L}\)</span></li>
+</ul>
+<p>Then, we can decompose the variance of the <span class="math inline">\(i\)</span>th variable into two parts:</p>
+<ol style="list-style-type: decimal">
+<li>
+<span class="math inline">\(i\)</span>th <strong>communality</strong>: <span class="math inline">\(h_i^2=l_{i1}^2+l_{i2}^2+\dots+l_{im}^2\)</span>
+</li>
+<li>
+<span class="math inline">\(i\)</span>th <strong>uniqueness</strong> or <strong>specific variance</strong>: <span class="math inline">\(\psi_i\)</span>
+</li>
+</ol>
+<p><span class="math display">\[Var(X_i)=\sigma_{ii}=h_i^2+\psi_i, i=1,2,\dots,p\]</span></p>
+<ul>
+<li><p>To determine if <span class="math inline">\(\vec F, \mathbf{L}\)</span> and <span class="math inline">\(\vec \epsilon\)</span> exist such that <span class="math inline">\(\vec X- \vec \mu= \mathbf{L}\vec F+\vec \epsilon\)</span>, we try to find <span class="math inline">\(\mathbf{L}\)</span> and <span class="math inline">\(\mathbf{\Psi}\)</span> so that the factor analysis equation holds: <span class="math inline">\(\mathbf{\Sigma}=\mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span>.</p></li>
+<li><p>Remark: In practice, FA procedures are almost always applied to <span class="math inline">\(Z\)</span> scores and to the correlation matrix <span class="math inline">\(\mathbf{\rho}\)</span>.</p></li>
+<li><p>Example 9.1: p. 484. Verifying <span class="math inline">\(\mathbf{\Sigma}=\mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span> for two factors</p></li>
+<li><p>Example 9.2: p. 486. Nonexistence of a proper solution to the FA equation</p></li>
+</ul>
+</div>
+<div id="nonuniqueness-of-the-factors" class="section level3" number="2.3.3">
+<h3>
+<span class="header-section-number">2.3.3</span> Nonuniqueness of the Factors<a class="anchor" aria-label="anchor" href="#nonuniqueness-of-the-factors"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>For any <span class="math inline">\(m \times m\)</span> orthogonal matrix <span class="math inline">\(\mathbf{T}\)</span>, we have</li>
+</ul>
+<p><span class="math display">\[\mathbf{\Sigma}=\mathbf{L}\mathbf{L}'+\mathbf{\Psi}=\mathbf{LTT'L'}+\mathbf{\Psi}=\mathbf{(LT)}\mathbf{(LT)}'+\mathbf{\Psi}\]</span>
+and
+<span class="math display">\[Cov(\mathbf{T}'\vec F)=\mathbf{T}'\mathbf{T}=\mathbf{I}.\]</span></p>
+<p>That is, if <span class="math inline">\(\mathbf{L}\)</span> is a loading matrix, then <span class="math inline">\(\mathbf{L}^*=\mathbf{LT}\)</span> is also a
+loading matrix for factors <span class="math inline">\(\vec F^*=\mathbf{T}'\vec F\)</span>, which satisfies</p>
+<p><span class="math display">\[\mathbf{L}^*\vec F^*=\mathbf{L}\vec F.\]</span></p>
+<p>Hence, <strong>the factor loading matrix <span class="math inline">\(\mathbf{L}\)</span> is not unique</strong>.</p>
+</div>
+</div>
+<div id="methods-of-estimation" class="section level2" number="2.4">
+<h2>
+<span class="header-section-number">2.4</span> 9.3 Methods of Estimation<a class="anchor" aria-label="anchor" href="#methods-of-estimation"><i class="fas fa-link"></i></a>
+</h2>
+<p><strong>Question</strong>: Does the FA model with a small number of factors, adequately represent the data?</p>
+<p><strong>Solution</strong>: verify the covariance relationship:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\mathbf{\Sigma}=Cov(\vec X) = \mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span></li>
+<li><span class="math inline">\(Cov(\vec X, \vec F) = \mathbf{L}\)</span></li>
+</ol>
+<ul>
+<li><p>Parameters in the FA model: the factor loadings <span class="math inline">\(l_{ij}\)</span> and specific variances <span class="math inline">\(\psi_{i}\)</span>.</p></li>
+<li>
+<p>Two of the most popular methods of parameter estimation</p>
+<ul>
+<li>the principal component (and the related principal factor) method</li>
+<li>the maximum likelihood method.</li>
+</ul>
+</li>
+</ul>
+<div id="the-principal-component-and-principal-factor-method" class="section level3" number="2.4.1">
+<h3>
+<span class="header-section-number">2.4.1</span> The Principal Component (and Principal Factor) Method<a class="anchor" aria-label="anchor" href="#the-principal-component-and-principal-factor-method"><i class="fas fa-link"></i></a>
+</h3>
+<p>The spectral decomposition:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{\Sigma} &amp; = \lambda_1\vec e_1\vec e_1'+\dots+\lambda_p\vec e_p\vec e_p'\\
+&amp;=\begin{bmatrix}
+    \sqrt{\lambda_1}\vec e_1&amp;
+    \dots&amp;
+    \sqrt{\lambda_p}\vec e_p
+\end{bmatrix}
+\begin{bmatrix}
+    \sqrt{\lambda_1}\vec e_1\\
+    \dots\\
+    \sqrt{\lambda_p}\vec e_p
+\end{bmatrix}
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\lambda_1\ge \lambda_2\ge\dots\lambda_p\ge0\)</span>.</p>
+<p>Neglecting the last <span class="math inline">\(p-m\)</span> small eigenvalues and allowing for specific factors, we have the following approximation:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{\Sigma} &amp; \approx \mathbf{L}\mathbf{L}'+\mathbf{\Psi}\\
+&amp;=\begin{bmatrix}
+    \sqrt{\lambda_1}\vec e_1&amp;
+    \dots&amp;
+    \sqrt{\lambda_m}\vec e_m
+\end{bmatrix}
+\begin{bmatrix}
+    \sqrt{\lambda_1}\vec e_1\\
+    \dots\\
+    \sqrt{\lambda_m}\vec e_m
+\end{bmatrix} +
+\begin{bmatrix}
+    \psi_{1} &amp; 0 &amp; \dots &amp; 0 \\
+    0 &amp; \psi_{2} &amp; \dots &amp; 0 \\
+    \vdots &amp; \vdots &amp; \ddots&amp; \vdots \\
+    0 &amp; 0 &amp; \dots &amp; \psi_{p}
+\end{bmatrix}
+\end{aligned}
+\]</span></p>
+<div id="principle-component-solution-of-the-factor-model" class="section level4" number="2.4.1.1">
+<h4>
+<span class="header-section-number">2.4.1.1</span> Principle Component Solution of the Factor Model<a class="anchor" aria-label="anchor" href="#principle-component-solution-of-the-factor-model"><i class="fas fa-link"></i></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>The matrix of estimated factor loadings <span class="math inline">\(\{\tilde{l}_{ij}\}\)</span>:</li>
+</ol>
+<p><span class="math display">\[\widetilde{\mathbf{L}}=\begin{bmatrix}
+    \sqrt{\hat\lambda_1}\hat{\vec e_1}&amp;
+    \dots&amp;
+    \sqrt{\hat\lambda_m}\hat{\vec e_m}
+\end{bmatrix},\]</span></p>
+<p>where <span class="math inline">\(({\hat\lambda_i}\hat{\vec e_i})\)</span> are eigenvalue-eigenvector pairs of the sample covariance matrix <span class="math inline">\(\mathbf{S}\)</span>, and <span class="math inline">\(\hat\lambda_1\ge \hat\lambda_2\ge\dots\hat\lambda_p\ge0\)</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>The estimated specific variances are provided by the diagonal elements of <span class="math inline">\(\mathbf{S} - \widetilde{\mathbf{L}}\widetilde{\mathbf{L}}'\)</span>:</li>
+</ol>
+<p><span class="math display">\[\widetilde{\mathbf{\Psi}}=\begin{bmatrix}
+    \widetilde\psi_{1} &amp; 0 &amp; \dots &amp; 0 \\
+    0 &amp; \widetilde\psi_{2} &amp; \dots &amp; 0 \\
+    \vdots &amp; \vdots &amp; \ddots&amp; \vdots \\
+    0 &amp; 0 &amp; \dots &amp; \widetilde\psi_{p}
+\end{bmatrix} \text{ with } \widetilde\psi_{i}=s_{ii} - \sum_{j=1}^m\tilde{l}_{ij}^2,\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Communalities are estimated as <span class="math inline">\(\tilde{h}_{i}^2=\sum_{j=1}^m\tilde{l}_{ij}^2\)</span></p></li>
+<li><p>The residual matrix: <span class="math inline">\(\mathbf{S} - (\widetilde{\mathbf{L}}\widetilde{\mathbf{L}}' + \widetilde{\mathbf{\Psi}})\)</span>.</p></li>
+<li><p>The contribution to the total sample variance from the <span class="math inline">\(j\)</span>th factor: <span class="math inline">\(\sum_{i=1}^p\tilde{l}_{ij}^2=\hat\lambda_i\)</span></p></li>
+</ol>
+</div>
+<div id="example-9.3-p.-491" class="section level4" number="2.4.1.2">
+<h4>
+<span class="header-section-number">2.4.1.2</span> Example 9.3 (p. 491)<a class="anchor" aria-label="anchor" href="#example-9.3-p.-491"><i class="fas fa-link"></i></a>
+</h4>
+</div>
+<div id="example-9.4-p.-493-fa-of-stock-price-data" class="section level4" number="2.4.1.3">
+<h4>
+<span class="header-section-number">2.4.1.3</span> Example 9.4 (p. 493, FA of stock-price data)<a class="anchor" aria-label="anchor" href="#example-9.4-p.-493-fa-of-stock-price-data"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-4.DAT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"JPM"</span>, <span class="st">"Citi"</span>, <span class="st">"WellsF"</span>, <span class="st">"Shell"</span>, <span class="st">"Exxon"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             JPM       Citi     WellsF      Shell      Exxon</span></span>
+<span><span class="co">#&gt; [1,]  0.0130338 -0.0078431 -0.0031889 -0.0447693  0.0052151</span></span>
+<span><span class="co">#&gt; [2,]  0.0084862  0.0166886 -0.0062100  0.0119560  0.0134890</span></span>
+<span><span class="co">#&gt; [3,] -0.0179153 -0.0086393  0.0100360  0.0000000 -0.0061428</span></span>
+<span><span class="co">#&gt; [4,]  0.0215589 -0.0034858  0.0174353 -0.0285917 -0.0069534</span></span>
+<span><span class="co">#&gt; [5,]  0.0108225  0.0037167 -0.0101345  0.0291900  0.0409751</span></span>
+<span><span class="co">#&gt; [6,]  0.0101713 -0.0121978 -0.0083768  0.0137083  0.0029895</span></span>
+<span></span>
+<span><span class="co"># PCA based on the spectral decomposition</span></span>
+<span><span class="co"># cor=T: standardized variables/correlation matrix</span></span>
+<span><span class="va">X.pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/princomp.html">princomp</a></span><span class="op">(</span><span class="va">X</span>, cor<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: ggplot2</span></span>
+<span><span class="co">#&gt; Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/eigenvalue.html">fviz_eig</a></span><span class="op">(</span><span class="va">X.pc</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="09-FA_files/figure-html/unnamed-chunk-2-1.png" width="672"></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="va">ed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/eigen.html">eigen</a></span><span class="op">(</span><span class="va">R</span><span class="op">)</span></span>
+<span><span class="va">lambda</span> <span class="op">&lt;-</span> <span class="va">ed</span><span class="op">$</span><span class="va">values</span></span>
+<span><span class="va">lambda</span></span>
+<span><span class="co">#&gt; [1] 2.4372731 1.4070127 0.5005127 0.4000316 0.2551699</span></span>
+<span><span class="va">ei</span> <span class="op">&lt;-</span> <span class="va">ed</span><span class="op">$</span><span class="va">vectors</span></span>
+<span></span>
+<span><span class="va">L.all</span> <span class="op">&lt;-</span> <span class="va">ei</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">lambda</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># m = 2</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">L</span> <span class="op">&lt;-</span> <span class="va">L.all</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="va">m</span><span class="op">]</span> <span class="co"># estimated factor loadings</span></span>
+<span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">L</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># communalities</span></span>
+<span><span class="va">psi</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">h2</span> <span class="co"># estimated specific variances</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>variable<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                 F1<span class="op">=</span><span class="va">L</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>                 F2<span class="op">=</span><span class="va">L</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
+<span>                 h2<span class="op">=</span><span class="va">h2</span>,</span>
+<span>                 psi<span class="op">=</span><span class="va">psi</span><span class="op">)</span></span>
+<span><span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">is.numeric</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">is.numeric</span><span class="op">)</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">df</span></span>
+<span><span class="co">#&gt;   variable     F1     F2    h2   psi</span></span>
+<span><span class="co">#&gt; 1      JPM -0.732  0.437 0.727 0.273</span></span>
+<span><span class="co">#&gt; 2     Citi -0.831  0.280 0.770 0.230</span></span>
+<span><span class="co">#&gt; 3   WellsF -0.726  0.374 0.667 0.333</span></span>
+<span><span class="co">#&gt; 4    Shell -0.605 -0.694 0.847 0.153</span></span>
+<span><span class="co">#&gt; 5    Exxon -0.563 -0.719 0.834 0.166</span></span>
+<span></span>
+<span><span class="va">Residual</span> <span class="op">&lt;-</span> <span class="va">R</span> <span class="op">-</span> <span class="va">L</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">psi</span><span class="op">)</span></span>
+<span><span class="va">Residual</span></span>
+<span><span class="co">#&gt;                JPM        Citi       WellsF        Shell</span></span>
+<span><span class="co">#&gt; JPM     0.00000000 -0.09884073 -0.184513342 -0.025317756</span></span>
+<span><span class="co">#&gt; Citi   -0.09884073  0.00000000 -0.134323655  0.014310342</span></span>
+<span><span class="co">#&gt; WellsF -0.18451334 -0.13432365  0.000000000  0.002794963</span></span>
+<span><span class="co">#&gt; Shell  -0.02531776  0.01431034  0.002794963  0.000000000</span></span>
+<span><span class="co">#&gt; Exxon   0.05580220 -0.05378426  0.005960127 -0.155835955</span></span>
+<span><span class="co">#&gt;               Exxon</span></span>
+<span><span class="co">#&gt; JPM     0.055802201</span></span>
+<span><span class="co">#&gt; Citi   -0.053784258</span></span>
+<span><span class="co">#&gt; WellsF  0.005960127</span></span>
+<span><span class="co">#&gt; Shell  -0.155835955</span></span>
+<span><span class="co">#&gt; Exxon   0.000000000</span></span></code></pre></div>
+<p>In this example, the first factor might be called <strong>market factor</strong>, and the second factor might be called <strong>industry factor</strong>.</p>
+</div>
+</div>
+<div id="the-maximum-likelihood-method" class="section level3" number="2.4.2">
+<h3>
+<span class="header-section-number">2.4.2</span> The Maximum likelihood Method<a class="anchor" aria-label="anchor" href="#the-maximum-likelihood-method"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li><p>We assume normality, and maximize the likelihood over <span class="math inline">\(\vec \mu\)</span> and <span class="math inline">\(\mathbf{\Sigma}\)</span>, subject to <span class="math inline">\(\mathbf{\Sigma}=\mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span>.</p></li>
+<li><p>It is desirable to make <span class="math inline">\(\mathbf{L}\)</span> <strong>well defined</strong> by imposing the computationally convenient uniqueness condition:</p></li>
+</ul>
+<p><span class="math display">\[\mathbf{L}'\mathbf{\Psi}^{-1}\mathbf{L}=\mathbf{\Delta}=diag\{\delta_1\ge\dots\ge\delta_m\}\]</span></p>
+<ul>
+<li>We require that there are less parameters in the restricted FA model than in the unrestricted model.
+<ul>
+<li>number of parameters in the restricted FA model (<span class="math inline">\(\mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span>): <span class="math inline">\(p+pm-(m-1)m/2\)</span>
+</li>
+<li>number of parameters in the unrestricted model (<span class="math inline">\(\mathbf{\Sigma}\)</span>): <span class="math inline">\(p(p+1)/2\)</span>
+</li>
+</ul>
+</li>
+</ul>
+<div id="example-9.5-factor-analysis-of-stock-price-data-using-the-maximum-likelihood-method" class="section level4" number="2.4.2.1">
+<h4>
+<span class="header-section-number">2.4.2.1</span> Example 9.5 (Factor analysis of stock-price data using the maximum likelihood method)<a class="anchor" aria-label="anchor" href="#example-9.5-factor-analysis-of-stock-price-data-using-the-maximum-likelihood-method"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-4.DAT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"JPM"</span>, <span class="st">"Citi"</span>, <span class="st">"WellsF"</span>, <span class="st">"Shell"</span>, <span class="st">"Exxon"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             JPM       Citi     WellsF      Shell      Exxon</span></span>
+<span><span class="co">#&gt; [1,]  0.0130338 -0.0078431 -0.0031889 -0.0447693  0.0052151</span></span>
+<span><span class="co">#&gt; [2,]  0.0084862  0.0166886 -0.0062100  0.0119560  0.0134890</span></span>
+<span><span class="co">#&gt; [3,] -0.0179153 -0.0086393  0.0100360  0.0000000 -0.0061428</span></span>
+<span><span class="co">#&gt; [4,]  0.0215589 -0.0034858  0.0174353 -0.0285917 -0.0069534</span></span>
+<span><span class="co">#&gt; [5,]  0.0108225  0.0037167 -0.0101345  0.0291900  0.0409751</span></span>
+<span><span class="co">#&gt; [6,]  0.0101713 -0.0121978 -0.0083768  0.0137083  0.0029895</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="co"># Maximum likelihood solution</span></span>
+<span><span class="co"># The R function factanal() computes the mle on the basis of the sample correlation matrix R.</span></span>
+<span><span class="va">fit.mle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/factanal.html">factanal</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">m</span>, rotation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="co"># agrees with textbook (almost); "varimax" is the default</span></span>
+<span><span class="va">fit.mle</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; factanal(x = X, factors = m, rotation = "none")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uniquenesses:</span></span>
+<span><span class="co">#&gt;    JPM   Citi WellsF  Shell  Exxon </span></span>
+<span><span class="co">#&gt;  0.417  0.275  0.542  0.005  0.530 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM     0.121   0.754 </span></span>
+<span><span class="co">#&gt; Citi    0.328   0.786 </span></span>
+<span><span class="co">#&gt; WellsF  0.188   0.650 </span></span>
+<span><span class="co">#&gt; Shell   0.997         </span></span>
+<span><span class="co">#&gt; Exxon   0.685         </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.622   1.610</span></span>
+<span><span class="co">#&gt; Proportion Var   0.324   0.322</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.324   0.646</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of the hypothesis that 2 factors are sufficient.</span></span>
+<span><span class="co">#&gt; The chi square statistic is 1.97 on 1 degree of freedom.</span></span>
+<span><span class="co">#&gt; The p-value is 0.16</span></span>
+<span></span>
+<span><span class="co"># check: </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span><span class="op">(</span><span class="va">fit.mle</span><span class="op">$</span><span class="va">loadings</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  Factor1  Factor2 </span></span>
+<span><span class="co">#&gt; 1.622061 1.609847</span></span>
+<span></span>
+<span><span class="va">L</span> <span class="op">&lt;-</span> <span class="va">fit.mle</span><span class="op">$</span><span class="va">loadings</span></span>
+<span><span class="va">L</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM     0.121   0.754 </span></span>
+<span><span class="co">#&gt; Citi    0.328   0.786 </span></span>
+<span><span class="co">#&gt; WellsF  0.188   0.650 </span></span>
+<span><span class="co">#&gt; Shell   0.997         </span></span>
+<span><span class="co">#&gt; Exxon   0.685         </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.622   1.610</span></span>
+<span><span class="co">#&gt; Proportion Var   0.324   0.322</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.324   0.646</span></span>
+<span><span class="va">Psi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">fit.mle</span><span class="op">$</span><span class="va">uniquenesses</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">Psi</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span><span class="va">L</span>,<span class="fl">4</span><span class="op">)</span> <span class="co"># diagonal</span></span>
+<span><span class="co">#&gt;          Factor1 Factor2</span></span>
+<span><span class="co">#&gt; Factor1 200.3689  0.0000</span></span>
+<span><span class="co">#&gt; Factor2   0.0000  4.4049</span></span>
+<span><span class="va">resids.mle</span> <span class="op">&lt;-</span> <span class="va">R</span> <span class="op">-</span> <span class="op">(</span><span class="va">L</span><span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">L</span><span class="op">)</span> <span class="op">+</span> <span class="va">Psi</span><span class="op">)</span> <span class="co"># much smaller than residsual from the PC solution</span></span>
+<span><span class="va">resids.mle</span></span>
+<span><span class="co">#&gt;                  JPM          Citi        WellsF</span></span>
+<span><span class="co">#&gt; JPM     1.055860e-07  7.496780e-06 -2.564223e-03</span></span>
+<span><span class="co">#&gt; Citi    7.496780e-06  3.255672e-08  1.608871e-03</span></span>
+<span><span class="co">#&gt; WellsF -2.564223e-03  1.608871e-03  5.157370e-08</span></span>
+<span><span class="co">#&gt; Shell  -3.325561e-04  2.116218e-04 -9.518792e-06</span></span>
+<span><span class="co">#&gt; Exxon   5.198222e-02 -3.307885e-02  5.547153e-04</span></span>
+<span><span class="co">#&gt;                Shell         Exxon</span></span>
+<span><span class="co">#&gt; JPM    -3.325561e-04  5.198222e-02</span></span>
+<span><span class="co">#&gt; Citi    2.116218e-04 -3.307885e-02</span></span>
+<span><span class="co">#&gt; WellsF -9.518792e-06  5.547153e-04</span></span>
+<span><span class="co">#&gt; Shell  -1.559500e-06  1.218853e-04</span></span>
+<span><span class="co">#&gt; Exxon   1.218853e-04  2.670491e-07</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">resids.mle</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            JPM    Citi  WellsF  Shell   Exxon</span></span>
+<span><span class="co">#&gt; JPM     0.0000  0.0000 -0.0026 -3e-04  0.0520</span></span>
+<span><span class="co">#&gt; Citi    0.0000  0.0000  0.0016  2e-04 -0.0331</span></span>
+<span><span class="co">#&gt; WellsF -0.0026  0.0016  0.0000  0e+00  0.0006</span></span>
+<span><span class="co">#&gt; Shell  -0.0003  0.0002  0.0000  0e+00  0.0001</span></span>
+<span><span class="co">#&gt; Exxon   0.0520 -0.0331  0.0006  1e-04  0.0000</span></span></code></pre></div>
+<p>The ML method suggests that the first factor might be called <strong>banking factor</strong>, and the second factor might be called <strong>oil industry factor</strong>.</p>
+</div>
+</div>
+<div id="a-large-sample-test-for-the-number-of-common-factors" class="section level3" number="2.4.3">
+<h3>
+<span class="header-section-number">2.4.3</span> A Large Sample Test for the Number of Common Factors<a class="anchor" aria-label="anchor" href="#a-large-sample-test-for-the-number-of-common-factors"><i class="fas fa-link"></i></a>
+</h3>
+<p>In the result of Example 9.5, there is a likelihood ratio test for <span class="math inline">\(m\)</span>:</p>
+<p>“Test of the hypothesis that 2 factors are sufficient. The chi square statistic is 1.97 on 1 degree of freedom. The p-value is 0.16.”</p>
+<div id="likelihood-ratio-test-for-m" class="section level4" number="2.4.3.1">
+<h4>
+<span class="header-section-number">2.4.3.1</span> likelihood ratio test for <span class="math inline">\(m\)</span><a class="anchor" aria-label="anchor" href="#likelihood-ratio-test-for-m"><i class="fas fa-link"></i></a>
+</h4>
+<p>From Equation (4-18), Result 5.2, and Supplement 9A in the textbook, we have the likelihood ratio statistic for <span class="math inline">\(H_0: \mathbf{\Sigma}=\mathbf{L}\mathbf{L}'+\mathbf{\Psi}\)</span>:</p>
+<p><span class="math display">\[-2\ln\Lambda = n\ln\bigg(\frac{|\hat{\mathbf{L}} \hat{\mathbf{L}}'+\hat{\mathbf{\Psi}}|}{|(n-1)/n\mathbf{S}|}\bigg).\]</span></p>
+<p>The Bartlett’s correlation:</p>
+<p><span class="math display">\[(n-1-(2p+4m+5)/6)\ln\bigg(\frac{|\hat{\mathbf{L}} \hat{\mathbf{L}}'+\hat{\mathbf{\Psi}}|}{|(n-1)/n\mathbf{S}|}\bigg)\sim \chi^2_{[(p-m)^2]-(p+m)]/2}\]</span></p>
+</div>
+</div>
+</div>
+<div id="factor-rotation-mathbflmathbflt" class="section level2" number="2.5">
+<h2>
+<span class="header-section-number">2.5</span> 9.4 Factor Rotation <span class="math inline">\(\mathbf{L}^*=\mathbf{LT}\)</span><a class="anchor" aria-label="anchor" href="#factor-rotation-mathbflmathbflt"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li><p>We have shown that the FA model is invariant under orthogonal transformation (the loadings solution is not unique.)</p></li>
+<li><p>We attempt to choose a transformation to make the factors more interpreble. The loadings on each particular factor can be easily split into interpreble groups, which means for each <span class="math inline">\(j\)</span>, <span class="math inline">\(\hat{l}_{ij}\)</span> should be highly varied.</p></li>
+</ul>
+<div id="varimax-criterion" class="section level3" number="2.5.1">
+<h3>
+<span class="header-section-number">2.5.1</span> varimax criterion<a class="anchor" aria-label="anchor" href="#varimax-criterion"><i class="fas fa-link"></i></a>
+</h3>
+<p>Define <span class="math inline">\(\tilde{l}_{ij}^*=\dfrac{\hat{l}_{ij}^*}{\hat h_i}\)</span>. Then, the varimax criterion selects the orthogonal transformation <span class="math inline">\(\mathbf{T}\)</span> to maximize</p>
+<p><span class="math display">\[V=\dfrac{1}{p}\sum_{j=1}^m\Big[\sum_{i=1}^p\tilde{l}_{ij}^{*4} -\dfrac{(\sum_{i=1}^p\tilde{l}_{ij}^{*2})^2}{p} \Big].\]</span></p>
+</div>
+<div id="example-9.9-p.-508-self-study-sas-program" class="section level3" number="2.5.2">
+<h3>
+<span class="header-section-number">2.5.2</span> Example 9.9 (p. 508, self-study, SAS program)<a class="anchor" aria-label="anchor" href="#example-9.9-p.-508-self-study-sas-program"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>factor 1: nutritional factor; factor 2: taste factor</li>
+</ul>
+</div>
+<div id="example-9.10-rotated-loading-for-the-stock-price-data" class="section level3" number="2.5.3">
+<h3>
+<span class="header-section-number">2.5.3</span> Example 9.10 (Rotated loading for the stock-price data)<a class="anchor" aria-label="anchor" href="#example-9.10-rotated-loading-for-the-stock-price-data"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-4.DAT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"JPM"</span>, <span class="st">"Citi"</span>, <span class="st">"WellsF"</span>, <span class="st">"Shell"</span>, <span class="st">"Exxon"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             JPM       Citi     WellsF      Shell      Exxon</span></span>
+<span><span class="co">#&gt; [1,]  0.0130338 -0.0078431 -0.0031889 -0.0447693  0.0052151</span></span>
+<span><span class="co">#&gt; [2,]  0.0084862  0.0166886 -0.0062100  0.0119560  0.0134890</span></span>
+<span><span class="co">#&gt; [3,] -0.0179153 -0.0086393  0.0100360  0.0000000 -0.0061428</span></span>
+<span><span class="co">#&gt; [4,]  0.0215589 -0.0034858  0.0174353 -0.0285917 -0.0069534</span></span>
+<span><span class="co">#&gt; [5,]  0.0108225  0.0037167 -0.0101345  0.0291900  0.0409751</span></span>
+<span><span class="co">#&gt; [6,]  0.0101713 -0.0121978 -0.0083768  0.0137083  0.0029895</span></span>
+<span></span>
+<span><span class="va">R</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="co"># Maximum likelihood solution</span></span>
+<span><span class="co"># The R function factanal() computes the mle on the basis of the sample correlation matrix R.</span></span>
+<span><span class="va">fit.mle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/factanal.html">factanal</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">m</span>, rotation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="co"># agrees with textbook (almost); "varimax" is the default</span></span>
+<span></span>
+<span><span class="co"># Rotations </span></span>
+<span><span class="va">fit.mle</span> <span class="co"># mle; no rotation</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; factanal(x = X, factors = m, rotation = "none")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uniquenesses:</span></span>
+<span><span class="co">#&gt;    JPM   Citi WellsF  Shell  Exxon </span></span>
+<span><span class="co">#&gt;  0.417  0.275  0.542  0.005  0.530 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM     0.121   0.754 </span></span>
+<span><span class="co">#&gt; Citi    0.328   0.786 </span></span>
+<span><span class="co">#&gt; WellsF  0.188   0.650 </span></span>
+<span><span class="co">#&gt; Shell   0.997         </span></span>
+<span><span class="co">#&gt; Exxon   0.685         </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.622   1.610</span></span>
+<span><span class="co">#&gt; Proportion Var   0.324   0.322</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.324   0.646</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of the hypothesis that 2 factors are sufficient.</span></span>
+<span><span class="co">#&gt; The chi square statistic is 1.97 on 1 degree of freedom.</span></span>
+<span><span class="co">#&gt; The p-value is 0.16</span></span>
+<span><span class="va">fit.mle.r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/factanal.html">factanal</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">m</span>, rotation <span class="op">=</span> <span class="st">"varimax"</span><span class="op">)</span></span>
+<span><span class="va">fit.mle.r</span>  </span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; factanal(x = X, factors = m, rotation = "varimax")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uniquenesses:</span></span>
+<span><span class="co">#&gt;    JPM   Citi WellsF  Shell  Exxon </span></span>
+<span><span class="co">#&gt;  0.417  0.275  0.542  0.005  0.530 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM    0.763          </span></span>
+<span><span class="co">#&gt; Citi   0.819   0.232  </span></span>
+<span><span class="co">#&gt; WellsF 0.668   0.108  </span></span>
+<span><span class="co">#&gt; Shell  0.113   0.991  </span></span>
+<span><span class="co">#&gt; Exxon  0.108   0.677  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.725   1.507</span></span>
+<span><span class="co">#&gt; Proportion Var   0.345   0.301</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.345   0.646</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of the hypothesis that 2 factors are sufficient.</span></span>
+<span><span class="co">#&gt; The chi square statistic is 1.97 on 1 degree of freedom.</span></span>
+<span><span class="co">#&gt; The p-value is 0.16</span></span>
+<span><span class="co"># Bank stocks (variables 1,2,3) load heavily on factor 1, much less so on factor 2;</span></span>
+<span><span class="co"># oil stocks load heavily on factor 2, much less so on factor 1.</span></span>
+<span></span>
+<span><span class="co"># or you can use varimax() function to rotate the loadings</span></span>
+<span><span class="va">rotate</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/varimax.html">varimax</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/loadings.html">loadings</a></span><span class="op">(</span><span class="va">fit.mle</span><span class="op">)</span><span class="op">)</span>  <span class="co"># identical to fit.mle.r, but labeling of factors is reversed</span></span>
+<span><span class="va">rotate</span></span>
+<span><span class="co">#&gt; $loadings</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM            0.763  </span></span>
+<span><span class="co">#&gt; Citi   0.232   0.819  </span></span>
+<span><span class="co">#&gt; WellsF 0.108   0.668  </span></span>
+<span><span class="co">#&gt; Shell  0.991   0.113  </span></span>
+<span><span class="co">#&gt; Exxon  0.677   0.108  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.507   1.725</span></span>
+<span><span class="co">#&gt; Proportion Var   0.301   0.345</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.301   0.646</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $rotmat</span></span>
+<span><span class="co">#&gt;            [,1]      [,2]</span></span>
+<span><span class="co">#&gt; [1,]  0.9927706 0.1200276</span></span>
+<span><span class="co">#&gt; [2,] -0.1200276 0.9927706</span></span></code></pre></div>
+</div>
+</div>
+<div id="factor-scores-estimation-of-the-common-factors-vec-f" class="section level2" number="2.6">
+<h2>
+<span class="header-section-number">2.6</span> 9.5 Factor Scores (Estimation of the common factors <span class="math inline">\(\vec f\)</span>)<a class="anchor" aria-label="anchor" href="#factor-scores-estimation-of-the-common-factors-vec-f"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>Factor scores are estimates of values of the <strong>unobserved</strong> random factor vectors <span class="math inline">\(\vec F\)</span>, <strong>not</strong> estimates of unknown parameters.</li>
+</ul>
+<div id="the-weighted-least-square-method-bartlett-scores-in-r-when-using-factanal" class="section level3" number="2.6.1">
+<h3>
+<span class="header-section-number">2.6.1</span> The Weighted Least Square Method (‘Bartlett’ scores in R when using factanal())<a class="anchor" aria-label="anchor" href="#the-weighted-least-square-method-bartlett-scores-in-r-when-using-factanal"><i class="fas fa-link"></i></a>
+</h3>
+<p>Bartlett proposed choosing the estimates <span class="math inline">\(\hat{\vec f}\)</span> of <span class="math inline">\(\vec f\)</span> to minimize the sum of the squares of the errors, which is weighted by the reciprocal of their variances:</p>
+<p><span class="math display">\[\sum_{i=1}^p\dfrac{\epsilon_i^2}{\psi_i}=\vec \epsilon'\mathbf{\Psi}^{-1}\vec \epsilon=(\vec x - \vec \mu - \mathbf{L}\vec f)'\mathbf{\Psi}^{-1}(\vec x - \vec \mu - \mathbf{L}\vec f).\]</span></p>
+<div class="inline-figure"><img src="images/FS_WLS.jpg" width="600"></div>
+<ul>
+<li>
+<strong>Comment:</strong> For the principle component solution, we generate factor scores using an unweighted (ordinary) least squares procedure (assume that the specific variances <span class="math inline">\(\psi_i\)</span> are equal or nearly equal.)</li>
+</ul>
+</div>
+<div id="the-regression-method-regression-scores-in-r-when-using-factanal" class="section level3" number="2.6.2">
+<h3>
+<span class="header-section-number">2.6.2</span> The Regression Method (‘regression’ scores in R when using factanal())<a class="anchor" aria-label="anchor" href="#the-regression-method-regression-scores-in-r-when-using-factanal"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li><p>Regression formula: <span class="math inline">\(\vec F \sim \vec x\)</span></p></li>
+<li><p>Under the normality assumption, <span class="math inline">\(\vec X - \vec \mu\)</span> and <span class="math inline">\(\vec F\)</span> are jointly normal:</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{bmatrix}
+    \vec X - \vec \mu \\
+    \vec F
+\end{bmatrix} = N_{p+m} \Bigg(\vec 0, \begin{bmatrix}
+    \mathbf{\Sigma} = \mathbf{L}\mathbf{L}'+\mathbf{\Psi} &amp; \mathbf{L} \\
+    \mathbf{L}' &amp; \mathbf{I}
+\end{bmatrix}\Bigg)
+\]</span></p>
+<ul>
+<li>By Result 4.6, the conditional distribution of <span class="math inline">\(\vec F|\vec x\)</span> is multivariate normal with</li>
+</ul>
+<p><span class="math display">\[E(\vec F|\vec x) = \mathbf{L}'\mathbf{\Sigma}^{-1}(\vec X - \vec \mu)=\mathbf{L}'(\mathbf{L}\mathbf{L}'+\mathbf{\Psi})^{-1}(\vec X - \vec \mu)\]</span></p>
+<div class="inline-figure"><img src="images/FS_Regression.jpg" width="600"></div>
+<div id="the-stock-price-data-example-for-factor-scores" class="section level4" number="2.6.2.1">
+<h4>
+<span class="header-section-number">2.6.2.1</span> The stock-price data Example for factor scores<a class="anchor" aria-label="anchor" href="#the-stock-price-data-example-for-factor-scores"><i class="fas fa-link"></i></a>
+</h4>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"dataset/T8-4.DAT"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"JPM"</span>, <span class="st">"Citi"</span>, <span class="st">"WellsF"</span>, <span class="st">"Shell"</span>, <span class="st">"Exxon"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             JPM       Citi     WellsF      Shell      Exxon</span></span>
+<span><span class="co">#&gt; [1,]  0.0130338 -0.0078431 -0.0031889 -0.0447693  0.0052151</span></span>
+<span><span class="co">#&gt; [2,]  0.0084862  0.0166886 -0.0062100  0.0119560  0.0134890</span></span>
+<span><span class="co">#&gt; [3,] -0.0179153 -0.0086393  0.0100360  0.0000000 -0.0061428</span></span>
+<span><span class="co">#&gt; [4,]  0.0215589 -0.0034858  0.0174353 -0.0285917 -0.0069534</span></span>
+<span><span class="co">#&gt; [5,]  0.0108225  0.0037167 -0.0101345  0.0291900  0.0409751</span></span>
+<span><span class="co">#&gt; [6,]  0.0101713 -0.0121978 -0.0083768  0.0137083  0.0029895</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="co"># WLS scores </span></span>
+<span><span class="va">fit.ml.WLS.r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/factanal.html">factanal</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">m</span>, rotation <span class="op">=</span> <span class="st">"varimax"</span>, scores <span class="op">=</span> <span class="st">"Bartlett"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># Regression scores </span></span>
+<span><span class="va">fit.ml.reg.r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/factanal.html">factanal</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">m</span>, rotation <span class="op">=</span> <span class="st">"varimax"</span>, scores <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span></span>
+<span><span class="va">fit.ml.reg.r</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; factanal(x = X, factors = m, scores = "regression", rotation = "varimax")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uniquenesses:</span></span>
+<span><span class="co">#&gt;    JPM   Citi WellsF  Shell  Exxon </span></span>
+<span><span class="co">#&gt;  0.417  0.275  0.542  0.005  0.530 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loadings:</span></span>
+<span><span class="co">#&gt;        Factor1 Factor2</span></span>
+<span><span class="co">#&gt; JPM    0.763          </span></span>
+<span><span class="co">#&gt; Citi   0.819   0.232  </span></span>
+<span><span class="co">#&gt; WellsF 0.668   0.108  </span></span>
+<span><span class="co">#&gt; Shell  0.113   0.991  </span></span>
+<span><span class="co">#&gt; Exxon  0.108   0.677  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                Factor1 Factor2</span></span>
+<span><span class="co">#&gt; SS loadings      1.725   1.507</span></span>
+<span><span class="co">#&gt; Proportion Var   0.345   0.301</span></span>
+<span><span class="co">#&gt; Cumulative Var   0.345   0.646</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Test of the hypothesis that 2 factors are sufficient.</span></span>
+<span><span class="co">#&gt; The chi square statistic is 1.97 on 1 degree of freedom.</span></span>
+<span><span class="co">#&gt; The p-value is 0.16</span></span>
+<span></span>
+<span><span class="va">out</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">fit.ml.WLS.r</span><span class="op">$</span><span class="va">scores</span>, <span class="va">fit.ml.reg.r</span><span class="op">$</span><span class="va">scores</span><span class="op">)</span> <span class="co"># use varimax</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"wls.r.F1"</span>, <span class="st">"wls.r.F2"</span>, <span class="st">"reg.r.F1"</span>, <span class="st">"reg.r.F2"</span><span class="op">)</span></span>
+<span><span class="va">out</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span> <span class="co"># There are n = 103 rows</span></span>
+<span><span class="co">#&gt;          wls.r.F1    wls.r.F2    reg.r.F1    reg.r.F2</span></span>
+<span><span class="co">#&gt;  [1,]  0.25089936 -1.85367070  0.16535864 -1.83427398</span></span>
+<span><span class="co">#&gt;  [2,]  0.44303382  0.24787783  0.36753184  0.25550919</span></span>
+<span><span class="co">#&gt;  [3,] -0.48078772 -0.09835680 -0.39519052 -0.10792854</span></span>
+<span><span class="co">#&gt;  [4,]  0.79921292 -1.31497895  0.62520403 -1.28789064</span></span>
+<span><span class="co">#&gt;  [5,] -0.09859658  0.95881635 -0.06003873  0.94945235</span></span>
+<span><span class="co">#&gt;  [6,] -0.47081640  0.41285165 -0.37607023  0.39962913</span></span>
+<span><span class="co">#&gt;  [7,]  0.95854964  0.88173946  0.80260447  0.89563925</span></span>
+<span><span class="co">#&gt;  [8,]  1.03632812 -0.03557662  0.84651321 -0.01307322</span></span>
+<span><span class="co">#&gt;  [9,] -1.07061981 -1.14851602 -0.89995399 -1.16280345</span></span>
+<span><span class="co">#&gt; [10,]  0.55016716 -0.97789250  0.42882250 -0.95869583</span></span>
+<span></span>
+<span><span class="co"># Data reduction is accomplished by replacing the standardized data by these two simple factor scores.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit.ml.reg.r</span><span class="op">$</span><span class="va">scores</span>, main <span class="op">=</span> <span class="st">"Factor scores: first of 2 regression methods, \n mle estimates, varimax rotation"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="09-FA_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
+</div>
+</div>
+</div>
+<div id="reference-1" class="section level2" number="2.7">
+<h2>
+<span class="header-section-number">2.7</span> Reference<a class="anchor" aria-label="anchor" href="#reference-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>[1] Johnson, R. A., and Wichern, D. W. (2007). Applied multivariate statistical analysis (6th ed.). Upper Saddle River, N.J.: Pearson Prentice Hall.</p>
+<p>[2] Zelterman, D. (2015). Applied Multivariate Statistics with R (1st ed.).</p>
+<p>[3] Statistics 575: Multivariate Analysis, Douglas Wiens (<a href="http://www.mathstat.ualberta.ca/~wiens/stat575/stat575.html" class="uri">http://www.mathstat.ualberta.ca/~wiens/stat575/stat575.html</a>)</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="chapter-8-principle-component-analysis.html"><span class="header-section-number">1</span> Chapter 8: Principle Component Analysis</a></div>
+<div class="next"><a href="chapter-10-discrimination-and-classification.html"><span class="header-section-number">3</span> Chapter 10: Discrimination and Classification</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#chapter-9-factor-analysis"><span class="header-section-number">2</span> Chapter 9: Factor Analysis</a></li>
+<li><a class="nav-link" href="#overview-of-fa"><span class="header-section-number">2.1</span> Overview of FA</a></li>
+<li><a class="nav-link" href="#warnings"><span class="header-section-number">2.2</span> Warnings</a></li>
+<li>
+<a class="nav-link" href="#the-orthogonal-factor-model"><span class="header-section-number">2.3</span> The Orthogonal Factor Model</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#orthogonal-factor-model-with-m-common-factors"><span class="header-section-number">2.3.1</span> Orthogonal Factor Model with \(m\) Common Factors</a></li>
+<li><a class="nav-link" href="#covariance-structure-of-vec-x-under-the-orthogonal-factor-model"><span class="header-section-number">2.3.2</span> Covariance Structure of \(\vec X\) under the Orthogonal Factor Model</a></li>
+<li><a class="nav-link" href="#nonuniqueness-of-the-factors"><span class="header-section-number">2.3.3</span> Nonuniqueness of the Factors</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#methods-of-estimation"><span class="header-section-number">2.4</span> 9.3 Methods of Estimation</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#the-principal-component-and-principal-factor-method"><span class="header-section-number">2.4.1</span> The Principal Component (and Principal Factor) Method</a></li>
+<li><a class="nav-link" href="#the-maximum-likelihood-method"><span class="header-section-number">2.4.2</span> The Maximum likelihood Method</a></li>
+<li><a class="nav-link" href="#a-large-sample-test-for-the-number-of-common-factors"><span class="header-section-number">2.4.3</span> A Large Sample Test for the Number of Common Factors</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#factor-rotation-mathbflmathbflt"><span class="header-section-number">2.5</span> 9.4 Factor Rotation \(\mathbf{L}^*=\mathbf{LT}\)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#varimax-criterion"><span class="header-section-number">2.5.1</span> varimax criterion</a></li>
+<li><a class="nav-link" href="#example-9.9-p.-508-self-study-sas-program"><span class="header-section-number">2.5.2</span> Example 9.9 (p. 508, self-study, SAS program)</a></li>
+<li><a class="nav-link" href="#example-9.10-rotated-loading-for-the-stock-price-data"><span class="header-section-number">2.5.3</span> Example 9.10 (Rotated loading for the stock-price data)</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#factor-scores-estimation-of-the-common-factors-vec-f"><span class="header-section-number">2.6</span> 9.5 Factor Scores (Estimation of the common factors \(\vec f\))</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#the-weighted-least-square-method-bartlett-scores-in-r-when-using-factanal"><span class="header-section-number">2.6.1</span> The Weighted Least Square Method (‘Bartlett’ scores in R when using factanal())</a></li>
+<li><a class="nav-link" href="#the-regression-method-regression-scores-in-r-when-using-factanal"><span class="header-section-number">2.6.2</span> The Regression Method (‘regression’ scores in R when using factanal())</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#reference-1"><span class="header-section-number">2.7</span> Reference</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/rstudio/bookdown-demo/blob/master/09-FA.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/rstudio/bookdown-demo/edit/master/09-FA.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Lecture notes for STA 6707 Multivariate Methods</strong>" was written by Fei Heng. It was last built on 2023-08-15.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

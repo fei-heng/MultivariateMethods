@@ -1,0 +1,26 @@
+h1:chapter-9-factor-analysis Chapter 9: Factor Analysis
+h2:overview-of-fa Overview of FA
+h2:warnings Warnings
+h2:the-orthogonal-factor-model The Orthogonal Factor Model
+h3:orthogonal-factor-model-with-m-common-factors Orthogonal Factor Model with  Common Factors
+h3:covariance-structure-of-vec-x-under-the-orthogonal-factor-model Covariance Structure of  under the Orthogonal Factor Model
+h3:nonuniqueness-of-the-factors Nonuniqueness of the Factors
+h2:methods-of-estimation 9.3 Methods of Estimation
+h3:the-principal-component-and-principal-factor-method The Principal Component (and Principal Factor) Method
+h4:principle-component-solution-of-the-factor-model Principle Component Solution of the Factor Model
+h4:example-9.3-p.-491 Example 9.3 (p. 491)
+h4:example-9.4-p.-493-fa-of-stock-price-data Example 9.4 (p. 493, FA of stock-price data)
+h3:the-maximum-likelihood-method The Maximum likelihood Method
+h4:example-9.5-factor-analysis-of-stock-price-data-using-the-maximum-likelihood-method Example 9.5 (Factor analysis of stock-price data using the maximum likelihood method)
+h3:a-large-sample-test-for-the-number-of-common-factors A Large Sample Test for the Number of Common Factors
+h4:likelihood-ratio-test-for-m likelihood ratio test for 
+h2:factor-rotation-mathbflmathbflt 9.4 Factor Rotation 
+h3:varimax-criterion varimax criterion
+h3:example-9.9-p.-508-self-study-sas-program Example 9.9 (p. 508, self-study, SAS program)
+h3:example-9.10-rotated-loading-for-the-stock-price-data Example 9.10 (Rotated loading for the stock-price data)
+h2:factor-scores-estimation-of-the-common-factors-vec-f 9.5 Factor Scores (Estimation of the common factors )
+h3:the-weighted-least-square-method-bartlett-scores-in-r-when-using-factanal The Weighted Least Square Method ( scores in R when using factanal())
+h3:the-regression-method-regression-scores-in-r-when-using-factanal The Regression Method ( scores in R when using factanal())
+h4:the-stock-price-data-example-for-factor-scores The stock-price data Example for factor scores
+h2:reference Reference
+

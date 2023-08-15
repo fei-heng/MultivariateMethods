@@ -20,7 +20,7 @@ In discriminant analysis we begin by knowing the group membership, and then try 
 
 Data on **three varieties of wine cultivars** is given in the data set wines (Forina et al. 1988). There are 178 different wines examined. A list of the 14 variables in this data set are listed in Table 10.1:
 
-<img src="images/Table_10_1.png", width="400">
+<img src="images/Table_10_1.jpg" width="400">
 
 
 ```r

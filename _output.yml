@@ -2,10 +2,7 @@ bookdown::bs4_book:
   css: style.css
   theme:
     primary: "#096B72"
-  repo: 
-    base: https://github.com/fei-heng/MultivariateMethods
-    branch: master
-    subdir: docs
+  repo: https://github.com/fei-heng/MultivariateMethods
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
